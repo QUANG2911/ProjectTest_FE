@@ -10,11 +10,7 @@
                         <mat-label>Số container</mat-label>
                         <input matInput placeholder="Ex:123456" formControlName="firstCtrl" required  #inputMaContainer>
                     </mat-form-field>
-    
-                    <!-- <mat-form-field>
-                        <mat-label>Mã ISO</mat-label>
-                        <input matInput placeholder="Ex:20G2" formControlName="firstCtrl" required #inputMaISO >
-                    </mat-form-field> -->
+
                     <mat-form-field>
                         <mat-label formControlName="firstCtrl">Mã ISO</mat-label>
                         <mat-select  #inputMaISO >
@@ -46,8 +42,8 @@
                     <mat-form-field>
                         <mat-label>Loại container</mat-label>
                         <mat-select #inputLoai >
-                          <mat-option *ngFor="let item of LOAI_DATA" [value]="item.maloai" (click)="CheckThongTinIsoVoiLoai(inputLoai,inputMaISO)">
-                            {{ item.tenloai }}
+                          <mat-option *ngFor="let item of LOAI_DATA" [value]="item.maLoai" (click)="CheckThongTinIsoVoiLoai(inputLoai,inputMaISO)">
+                            {{ item.tenLoai }}
                           </mat-option>
                         </mat-select>
                       </mat-form-field>

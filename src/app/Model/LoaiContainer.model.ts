@@ -1,11 +1,11 @@
 export class loaiContainer {
-    maloai!: string;
-    tenloai!: string;
+    maLoai!: string;
+    tenLoai!: string;
 
-    constructor (maloai:string,tenloai:string)
+    constructor (maLoai:string,tenLoai:string)
     {
-        this.maloai = maloai,
-        this.tenloai = tenloai
+        this.maLoai = maLoai,
+        this.tenLoai = tenLoai
     }
 }
 

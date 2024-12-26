@@ -44,9 +44,8 @@ export class LoginInComponent{
         if(loaiTk === 'kh')
         {
           if(this.userLogin.maKH === null)
-          {
-            this.dataService.setData({TilteThongBao: "Thông báo", NoiDungThongBao : "Không tồn tại tài khoản khách hàng này", LoaiThongBao: 2});
-            this.openDialog('0ms', '0ms');
+          {            
+            this.GetThongBao("Không tồn tại tài khoản khách hàng này");
           }
           else
           {
@@ -59,8 +58,7 @@ export class LoginInComponent{
         {
           if(this.userLogin.maNv === null)
             {
-              this.dataService.setData({TilteThongBao: "Thông báo", NoiDungThongBao : "Không tồn tại tài khoản nhân viên này", LoaiThongBao: 2});
-              this.openDialog('0ms', '0ms');
+              this.GetThongBao("Không tồn tại tài khoản nhân viên này");
             }
             else
             {
@@ -71,23 +69,25 @@ export class LoginInComponent{
         }
         
       },(error) =>{
-        this.dataService.setData({TilteThongBao: "Thông báo", NoiDungThongBao : "Không tồn tại tài khoản này", LoaiThongBao: 2});
-        this.openDialog('0ms', '0ms');
+        this.GetThongBao("Không tồn tại tài khoản này");
       }
    )
+  }
+
+  GetThongBao(noiDungThongBao: string){
+    this.dataService.setData({TilteThongBao: "Thông báo", NoiDungThongBao : noiDungThongBao, LoaiThongBao: 2});
+    this.openDialog('0ms', '0ms');
   }
 
   Login(inputUser : any ,inputPass : any, inputLoaiTk: any){
     console.log(inputLoaiTk.value);
     if(inputUser.value.trim() === '' || inputPass.value.trim() === '')
     {
-      this.dataService.setData({TilteThongBao: "Thông báo", NoiDungThongBao : "Vui lòng điền đầy đủ Username và Password", LoaiThongBao: 2});
-      this.openDialog('0ms', '0ms');
+      this.GetThongBao("Vui lòng điền đầy đủ Username và Password");
     }      
     else if(inputLoaiTk.value === undefined)
     {
-      this.dataService.setData({TilteThongBao: "Thông báo", NoiDungThongBao : "Vui lòng chọn loại tài khoản đăng nhập", LoaiThongBao: 2});
-      this.openDialog('0ms', '0ms');
+      this.GetThongBao("Vui lòng chọn loại tài khoản đăng nhập");
     }
     else{
       this.kiemTraDangNhap(inputUser.value,inputPass.value,inputLoaiTk.value)
