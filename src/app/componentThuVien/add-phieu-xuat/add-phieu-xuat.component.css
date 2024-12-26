@@ -1,0 +1,63 @@
+.Title-Page{
+    display: block;
+    font-size: 2em;
+    margin-block-start: 0.67em;
+    margin-block-end: 0.67em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+    unicode-bidi: isolate;
+    margin-top: -15px;
+}
+
+.mat-mdc-form-field {
+    margin-top: 16px;
+  }
+
+
+.card{
+    width: 80%;
+    align-items: center;
+    justify-self: center;
+    background-color: #f4f7fa;
+    border: none;
+    .mat-stepper-horizontal
+    {
+        width: 70%;
+        border: solid 1px;
+        border-radius: 10px;
+        
+        .InputTem2,
+        .InputTem{
+            display: flex;
+            /* width: 85%; */
+            height: 420px;
+            align-content: space-evenly;
+            flex-direction: column;
+            flex-wrap: wrap;
+
+            .mat-mdc-form-field[_ngcontent-ng-c194527818]
+            {
+                width: 100%;     
+            }
+
+        }
+
+        .InputTem2{
+            width: 58%;
+
+            .mat-mdc-form-field{
+                width: 85%;
+            }
+        }
+       
+    }
+}
+
+        
+.mat-mdc-form-field[_ngcontent-ng-c194527818]
+{
+    width: 335px;     
+}
+
+

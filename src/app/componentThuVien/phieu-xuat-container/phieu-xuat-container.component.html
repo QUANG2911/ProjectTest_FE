@@ -1,0 +1,120 @@
+<h1>Danh sách Phiếu xuất Containers - {{idUser}}</h1>
+  <div class="card">
+      <div class="card-head">
+          <div class="head-title">
+            <button mat-fab extended class="button"  
+                (click)="ChuyenPageAdd()"                                    
+            >                        
+                <div class="button-title" style="width: 100px;" *ngIf="showItem(1)">
+                    <mat-icon class="button-icon" style="margin: 0px 4px 0 8px;">note_add</mat-icon>
+                    <span>Tạo đơn</span> 
+                </div>
+            </button>
+          </div>
+          <div class="head-content-left">
+              <div class="search-container">
+                  <div class="normal-sreach">
+                      <input #inputMaPhieu
+                          type = "search" class="sreach"  placeholder="Mã phiếu"
+                          (input)="SearchMaContainer(inputMaPhieu)"
+                      />
+                      <mat-icon class="sreach-icon">find_in_page</mat-icon>
+                  </div>
+              </div>
+              <div class="choose-TrangThai">
+                  <app-drop-down-list></app-drop-down-list>
+              </div>
+          </div>
+      </div>
+      <div *ngIf="isLoading" class="loading-indicator">
+        <!-- Hiển thị khi đang tải -->
+        <p>Loading, please wait...</p>
+      </div>
+      
+      <div *ngIf="!isLoading">
+        <!-- Hiển thị dữ liệu sau khi tải -->
+            <div class="card-body">
+                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8"
+                        matSort (matSortChange)="announceSortChange($event)"    
+                >
+                    <!-- mã phiếu Column -->
+                    <ng-container matColumnDef="maphieuxuat">
+                        <th mat-header-cell *matHeaderCellDef> Mã phiếu xuất </th>
+                        <td mat-cell *matCellDef="let element"> {{element.maPhieuXuat}} </td>
+                    </ng-container>              
+                                        
+                    <!-- Công ty Column -->
+                    <ng-container matColumnDef="tenKh">
+                        <th mat-header-cell *matHeaderCellDef> Công ty </th>
+                        <td mat-cell *matCellDef="let element"> {{element.tenKh}} </td>
+                    </ng-container>
+                    
+                    <!-- Số điện thoại Column -->
+                    <ng-container matColumnDef="sdt">
+                        <th mat-header-cell *matHeaderCellDef> Số điện thoại </th>
+                        <td mat-cell *matCellDef="let element"> {{element.sdt}} </td>
+                    </ng-container>
+        
+                    <!-- Ngày đăng ký phiếu Column -->
+                    <ng-container matColumnDef="ngayLamPhieu">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by ngayLamPhieu"> Ngày làm đơn </th>
+                        <td mat-cell *matCellDef="let element"> {{element.ngayLamPhieu | date:'dd/MM/YYYY'}}</td>
+                    </ng-container>
+
+                    <!-- Ngày nhập công Column -->
+                    <ng-container matColumnDef="ngayXuat">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by ngayXuat"> Ngày xuất cảng </th>
+                        <td mat-cell *matCellDef="let element">{{element.ngayXuat | date:'dd/MM/YYYY' }}</td>
+                    </ng-container>
+
+                    <!-- Trạng thái duyệt Column -->
+                    <ng-container matColumnDef="trangthaiduyet">
+                        <th mat-header-cell *matHeaderCellDef> Trạng thái duyệt </th>
+                        <td mat-cell *matCellDef="let element"> 
+                            <div class="DaDuyet" *ngIf="element.trangThaiDuyet === 1;else caseCho">
+                                <span class="title-duyet">Đã duyệt</span>
+                            </div>    
+                            <ng-template #caseCho>
+                                <div class="ChoDuyet" *ngIf="element.trangThaiDuyet === 0;else caseHuy"> 
+                                  <span class="title-cho">Đang chờ</span>  
+                                </div>
+                            </ng-template>
+                            <ng-template #caseHuy>
+                                <div class="DaHuy" *ngIf="element.trangThaiDuyet === -1">
+                                    <span class="title-huy">Từ chối</span>  
+                                </div>
+                            </ng-template>
+                        </td>
+                    </ng-container>
+
+                    <!-- button action Column -->
+                    <ng-container  matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef> Action </th>
+                        <td mat-cell *matCellDef="let element">
+                            <button mat-fab extended class="button"
+                                (click) = "TransformDetailPhieuXuatPage(element.maPhieuXuat,element.trangThaiDuyet)"                                        
+                            >                        
+                                <div class="button-title">
+                                <mat-icon class="button-icon">description</mat-icon>
+                                <span>Details</span> 
+                                </div>
+                            </button>
+                        </td>
+                    </ng-container>
+        
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>      
+            </div>
+             <!-- nút page xử lý -->
+            <!-- <mat-paginator [pageSizeOptions]=  "[5, 10, 20]" -->
+                <mat-paginator [pageSizeOptions]="[8]"
+                showFirstLastButtons
+                aria-label="Select page of periodic elements">
+            </mat-paginator>
+      </div>
+  </div>
+  
+  
+  
+  

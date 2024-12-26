@@ -1,0 +1,131 @@
+<p class="Title-Page">Phiếu đăng ký phiếu xin vận chuyển container vào cảng</p>
+
+<div class="card">
+    <mat-stepper labelPosition="bottom" #stepper>
+        <mat-step [stepControl]="firstFormGroup">
+            <form [formGroup]="firstFormGroup">
+                <ng-template matStepLabel>Điền thông tin container</ng-template>
+                <div class="InputTem">
+                    <mat-form-field>
+                        <mat-label>Số container</mat-label>
+                        <input matInput placeholder="Ex:123456" formControlName="firstCtrl" required  #inputMaContainer>
+                    </mat-form-field>
+    
+                    <!-- <mat-form-field>
+                        <mat-label>Mã ISO</mat-label>
+                        <input matInput placeholder="Ex:20G2" formControlName="firstCtrl" required #inputMaISO >
+                    </mat-form-field> -->
+                    <mat-form-field>
+                        <mat-label formControlName="firstCtrl">Mã ISO</mat-label>
+                        <mat-select  #inputMaISO >
+                            <mat-option value="22UP">22UP</mat-option>
+                            <mat-option value="22RL">22RL</mat-option>
+                            <mat-option value="22RL">22SL</mat-option>
+                            <mat-option value="22RL">22FL</mat-option>
+                            <mat-option value="45RP">45RP</mat-option>
+                            <mat-option value="42ST">42ST</mat-option>   
+                            <mat-option value="45RP">45UP</mat-option>
+                            <mat-option value="42ST">42FT</mat-option>                           
+                            <mat-option value="55FL">55UL</mat-option>
+                            <mat-option value="55FL">55SL</mat-option>
+                            <mat-option value="55FL">55FL</mat-option>
+                            <mat-option value="55FL">55RL</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Trọng lượng rỗng(tấn)</mat-label>
+                        <input type="number" matInput placeholder="Ex:20" formControlName="firstCtrl" required #inputRongWeight >
+                    </mat-form-field>
+    
+                    <mat-form-field>
+                        <mat-label>Tổng trọng lượng(tấn)</mat-label>
+                        <input type="number" matInput placeholder="Ex:20" formControlName="firstCtrl" required #inputTongWeight >
+                    </mat-form-field>
+    
+                    <mat-form-field>
+                        <mat-label>Loại container</mat-label>
+                        <mat-select #inputLoai >
+                          <mat-option *ngFor="let item of LOAI_DATA" [value]="item.maloai" (click)="CheckThongTinIsoVoiLoai(inputLoai,inputMaISO)">
+                            {{ item.tenloai }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Kích thước container</mat-label>
+                        <mat-select  #inputKichThuoc >
+                            <mat-option value="20" (click)="CheckThongTinIsoVoiSize(inputKichThuoc,inputMaISO)">20 feet</mat-option>
+                            <mat-option value="40" (click)="CheckThongTinIsoVoiSize(inputKichThuoc,inputMaISO)">40 feet</mat-option>
+                            <mat-option value="45" (click)="CheckThongTinIsoVoiSize(inputKichThuoc,inputMaISO)">45 feet</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+    
+                    <mat-form-field>
+                        <mat-label>Ngày sản xuất</mat-label>
+                            <input matInput [matDatepicker]="NgaySanXuat" #inputDateSanXuat  >
+                            <mat-datepicker #NgaySanXuat/>
+                            <mat-datepicker-toggle [for]="NgaySanXuat" matSuffix/>
+                    </mat-form-field>  
+                </div>
+                
+                <div>
+                    <button mat-button matStepperNext>Next</button>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step [stepControl]="secondFormGroup" optional>
+          <form [formGroup]="secondFormGroup">
+            <ng-template matStepLabel>Thông tin vận chuyển</ng-template>
+                <div class="InputTem2">
+                    <mat-form-field>
+                        <mat-label>Phương tiện vận chuyển container tới</mat-label>
+                        <mat-select #inputPhuongTienVanChuyen >
+                            <mat-option value="Tàu">Tàu</mat-option>
+                            <mat-option value="Xe">Xe</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Biển số/ số hiệu phương tiện vận chuyển</mat-label>
+                        <input matInput placeholder="Ex:20xx-xxx" formControlName="secondCtrl" #inputBienSo>
+                    </mat-form-field>
+
+                    <!-- mỗi component chỉ chứa một mã tên của datePicker nên phải gán bên từng datePick ở đây -->
+                    <mat-form-field>
+                        <mat-label>Ngày chuyển tới cảng</mat-label> 
+                            <input matInput [matDatepicker]="NgayToiCang" formControlName="secondCtrl" #InputNgayToiCang >
+                            <mat-datepicker #NgayToiCang/>
+                            <mat-datepicker-toggle [for]="NgayToiCang" matSuffix/>
+                    </mat-form-field>  
+                    
+                    <mat-form-field>
+                        <mat-label>Giờ giao tới</mat-label>
+                            <input matInput  #InputThoiGianToi                             
+                            [matTimepicker]="timepicker"                      
+                            formControlName="secondCtrl"     
+                            required                        
+                            >
+                            <mat-timepicker #timepicker/>
+                        <mat-timepicker-toggle [for]="timepicker" matSuffix/>
+                    </mat-form-field>
+                </div>
+           
+            <div>
+              <button mat-button matStepperPrevious>Back</button>
+              <button mat-button matStepperNext>Next</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step>
+          <ng-template matStepLabel>Done</ng-template>
+          <p style="margin-left: 31px;">You are now done.</p>
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button (click)="stepper.reset()">Reset</button>
+            <button mat-button (click)="LAYSOLIEU(inputMaContainer,inputMaISO,inputRongWeight,inputTongWeight,inputLoai,inputKichThuoc,inputDateSanXuat,InputNgayToiCang,InputThoiGianToi,inputBienSo,inputPhuongTienVanChuyen)">Done</button>
+          </div>
+        </mat-step>
+    </mat-stepper>
+</div>
+

@@ -1,0 +1,19 @@
+<div id="container">
+    <div id="button">     
+       <div style="display: flex;width: 100%; justify-content: space-between;    align-items: center; ">
+            <div style="font-size: 15px;">{{selectOption?.name || defaultOption?.name}}</div>
+
+            <span style="font-size: 12px;" (click)="removeSelect()">x</span>
+       </div>
+
+       <div id="dropdown">
+            <ul>
+                <li *ngFor="let item of option">
+                    <a (click)="chooseItem(item)">{{item.name}}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+   
+</div>

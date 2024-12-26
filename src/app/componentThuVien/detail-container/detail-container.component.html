@@ -1,0 +1,50 @@
+<h1  style="  margin-bottom: 2px;   margin-top: -27px;">Container {{maContainer}}</h1>
+<div class="card">
+    <div class="card-head">
+        <p class="head-title">Thông tin chi tiết</p>
+        <a class="goBack-head" (click)="TroVePageChinh()">
+            Go back
+        </a>
+    </div>
+    <div class="card-body">
+        <table class="styled-table">
+            <thead>
+              <tr>
+                <th>STT</th>
+                <th>Thông tin</th>
+                <th>Nội dung</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of keyDetail; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ item.label }}</td>
+                <td>{{ dataDetail[item.field]}}</td>
+              </tr>
+            </tbody>
+          </table> 
+    </div>
+</div>
+<div class="card">
+    <div class="card-head">
+        <p class="head-title">Thông tin vận chuyển</p>
+    </div>
+    <div class="card-body">
+        <table class="styled-table">
+            <thead>
+              <tr>
+                <th>STT</th>
+                <th>Thông tin</th>
+                <th>Nội dung</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of keyTrans; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ item.label }}</td>
+                <td>{{ dataDetail[item.field]}}</td>
+              </tr>
+            </tbody>
+          </table> 
+    </div>
+</div>
