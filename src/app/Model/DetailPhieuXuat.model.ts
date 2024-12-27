@@ -1,26 +1,26 @@
 export class DetailPhieuXuat {
-    maPhieuXuat!: string;
-    maContainer!: string;
-    isoCode!: string;
-    tenLoai!: string;
-    ngayXuat!: Date;
+    idExitForm!: string;
+    idContainer!: string;
+    // isoCode!: string;
+    typeContainerName!: string;
+    dateOfExitContainer!: Date;
     size!: number;      
-    sdt!: string;
-    bienSoDonViVanChuyen!: string;
-    donViXuatCang!: string;
-    ngaygiaocontainer!: Date;
+    phoneNumber!: string;
+    transportExitLicensePlate!: string;
+    tranportExitType!: string;
+    dateOfEntryContainer!: Date;
   
-    constructor( maPhieuXuat: string, maContainer: string,  isoCode: string, tenLoai: string, ngayXuat: Date,  size: number,  sdt: string, bienSoDonViVanChuyen: string,donViXuatCang: string, ngaygiaocontainer: Date)
+    constructor( idExitForm: string, idContainer: string,  isoCode: string, typeContainerName: string, dateOfExitContainer: Date,  size: number,  phoneNumber: string, transportExitLicensePlate: string,tranportExitType: string, dateOfEntryContainer: Date)
     {
-      this.maPhieuXuat = maPhieuXuat;
-      this.maContainer = maContainer;
-      this.isoCode = isoCode;
-      this.tenLoai = tenLoai;
-      this.ngayXuat = ngayXuat;
+      this.idExitForm = idExitForm;
+      this.idContainer = idContainer;
+      // this.isoCode = isoCode;
+      this.typeContainerName = typeContainerName;
+      this.dateOfExitContainer = dateOfExitContainer;
       this.size = size;
-      this.sdt = sdt;
-      this.bienSoDonViVanChuyen = bienSoDonViVanChuyen;
-      this.donViXuatCang = donViXuatCang;
-      this.ngaygiaocontainer = ngaygiaocontainer;
+      this.phoneNumber = phoneNumber;
+      this.transportExitLicensePlate = transportExitLicensePlate;
+      this.tranportExitType = tranportExitType;
+      this.dateOfEntryContainer = dateOfEntryContainer;
     }
   }

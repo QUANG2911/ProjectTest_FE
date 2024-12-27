@@ -1,12 +1,12 @@
 export class ThongTinPhieuXuat {
-    NGAYXUAT!: Date;
-    bienSoDonViVanChuyen!: string;
-    DONVIVANCHUYEN!: string;
+    DateOfExitContainer!: Date;
+    TransportExitLicensePlate!: string;
+    TransportExitType!: string;
   
-    constructor( NGAYXUAT: Date, bienSoDonViVanChuyen: string, DONVIVANCHUYEN: string)
+    constructor( DateOfExitContainer: Date, TransportExitLicensePlate: string, TransportExitType: string)
     {
-      this.NGAYXUAT = NGAYXUAT;
-      this.bienSoDonViVanChuyen = bienSoDonViVanChuyen;
-      this.DONVIVANCHUYEN = DONVIVANCHUYEN;
+      this.DateOfExitContainer = DateOfExitContainer;
+      this.TransportExitLicensePlate = TransportExitLicensePlate;
+      this.TransportExitType = TransportExitType;
     }
   }

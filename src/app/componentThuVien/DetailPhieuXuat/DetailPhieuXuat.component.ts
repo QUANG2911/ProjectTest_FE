@@ -1,35 +1,51 @@
 import { DataService } from '../../Service/DataService';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule} from '@angular/material/form-field';
 import { CommonModule, formatDate } from '@angular/common';
-import { ContainerTransport, Detail } from '../../Key/KeyThongTinContainer';
+import { ContainerTransport } from '../../Key/KeyThongTinContainer';
 import { ApiService } from '../../Service/ApiService';
-import { DetailPhieuNhap } from '../../Model/DetailPhieuNhap.model';
 import {MatButtonModule} from '@angular/material/button';
 
 import { ThongBaoComponent } from '../ThuVien/Notice/Notice.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-
-
+import { MatTableDataSource,MatTableModule } from '@angular/material/table';
+import { DetailPhieuXuat } from '../../Model/DetailPhieuXuat.model';
+import { MatSort, Sort, MatSortModule} from '@angular/material/sort';
+import { LiveAnnouncer} from '@angular/cdk/a11y';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 
 @Component({
-  selector: 'app-detail-phieu-nhap',
-  imports: [MatFormFieldModule,FormsModule,MatIconModule,FormsModule,CommonModule,MatButtonModule],
-  templateUrl: './detail-phieu-nhap.component.html',
-  styleUrl: './detail-phieu-nhap.component.css',
-  // changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-detail-phieu-xuat',
+  imports: [MatFormFieldModule,FormsModule,MatIconModule,FormsModule,CommonModule,MatButtonModule,MatTableModule,MatPaginatorModule,MatSortModule],
+  templateUrl: './DetailPhieuXuat.component.html',
+  styleUrl: './DetailPhieuXuat.component.css'
 })
-export class DetailPhieuNhapComponent implements OnInit{
-  ELEMENT_DATA!: DetailPhieuNhap ;
-
+export class DetailPhieuXuatComponent implements OnInit{
+  
   dataDetail: { [key: string]: string | number |Date}={};
 
-  keyDetail = Detail;
+  private _liveAnnouncer = inject(LiveAnnouncer);
+
+  // hàm sắp xếp
+  @ViewChild(MatSort) sort!: MatSort;
+
+  //hàm list page
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  // keyDetail = Detail;
   
-  keyTrans = ContainerTransport.filter(p =>p.field === 'macontainer' || p.field === 'ngayditoivitri' || p.field === 'donViDuaToiCang' || p.field == 'bienSoDonViVanChuyen');
+   // mũi tên hiện sắp xếp
+   announceSortChange(sortState: Sort) {
+    if (sortState.direction) {
+      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
+    } else {
+      this._liveAnnouncer.announce('Sorting cleared');
+    }
+  }
+
+  keyTrans = ContainerTransport.filter(p =>p.field === 'ngayxuatcang' || p.field === 'donViXuatCang' || p.field === 'sdt' || p.field == 'bienSoDonViVanChuyen');
   // lấy dữ liệu của API gửi lên
   maPhieuNhap : string ="";
   trangthaiduyet: number = 0;
@@ -37,13 +53,20 @@ export class DetailPhieuNhapComponent implements OnInit{
 
   itemsToShow: number[] = [];
 
+  ELEMENT_DATA: DetailPhieuXuat[] = [];
+
+  displayedColumns: string[] = ['macontainer','size','tenloai','dateOfEntryContainer'];
+  dataSource: any;             
+
+  originalData: DetailPhieuXuat[] = []; 
+  
   constructor(
               private dataService :DataService,
               private api :ApiService,
               private router: Router
              ){}
   
- setItemsToShow(trangthaiduyet: number,idUser: string) {
+  setItemsToShow(trangthaiduyet: number,idUser: string) {
     if (trangthaiduyet == 0 && idUser === 'SNP') {
       this.itemsToShow = [1]; // Hiển thị Button 
     }
@@ -52,8 +75,6 @@ export class DetailPhieuNhapComponent implements OnInit{
   showItem(item: number): boolean {
     return this.itemsToShow.includes(item);
   }
-
-
 
   getDuLieuTuDsPhieu()
   {
@@ -73,30 +94,42 @@ export class DetailPhieuNhapComponent implements OnInit{
     this.getDuLieuTuDsPhieu(); 
     this.setItemsToShow(this.trangthaiduyet, this.idUser);
     this.getDetailsPhieu(this.maPhieuNhap);
+    this.fetchData();
+  }
+
+  fetchData() {
+    // Mô phỏng việc lấy dữ liệu từ API
+    setTimeout(() => {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    },300); // Giả lập thời gian tải dữ liệu
   }
 
   getDetailsPhieu(maPhieuNhap: string)
   {
-    if(maPhieuNhap != null)
-    {
-      this.api.getDetailsPhieuNhap(maPhieuNhap).subscribe(
-        (data) =>{          
-            this.ELEMENT_DATA = data as DetailPhieuNhap;
-            this.dataDetail["donViDuaToiCang"] = this.ELEMENT_DATA.loaiHinhThucVanChuyen;
-            this.dataDetail["loaiContainer"] = this.ELEMENT_DATA.loaiContainer;
-            this.dataDetail["maIso"] = this.ELEMENT_DATA.maIso;
-            this.dataDetail["ngayditoivitri"] = formatDate(this.ELEMENT_DATA.ngayVanChuyenToiCang,'dd-MM-YYYY, giờ: HH:mm:ss','en-US');
-            this.dataDetail["macontainer"] = this.ELEMENT_DATA.maContainer;
-            this.dataDetail["size"] = this.ELEMENT_DATA.size;
-            this.dataDetail["trongLuongRong"] = this.ELEMENT_DATA.trongLuongRong;
-            this.dataDetail["trongLuongTong"] = this.ELEMENT_DATA.tongTrongLuong;
-            this.dataDetail["bienSoDonViVanChuyen"] = this.ELEMENT_DATA.bienSoDonViVanChuyen;
-        }
-      );
-    }
-    else{
-      console.log('maPhieuNhap rỗng');
-    }   
+    this.api.GetDetailPhieuXuat(maPhieuNhap)
+    .subscribe(
+      (data) => {
+        if(data != null)
+        {
+          console.log(data);
+          this.ELEMENT_DATA = data as DetailPhieuXuat[];
+
+          // nạp dữ liệu vào table
+          this.dataSource = new MatTableDataSource<DetailPhieuXuat>(this.ELEMENT_DATA);
+
+          this.dataDetail['ngayxuatcang'] = formatDate(this.ELEMENT_DATA[0].dateOfExitContainer,'dd-MM-YYYY, giờ: HH:mm:ss','en-US');
+          this.dataDetail['donViXuatCang'] = this.ELEMENT_DATA[0].tranportExitType;
+          this.dataDetail['sdt'] = this.ELEMENT_DATA[0].phoneNumber;
+          this.dataDetail['bienSoDonViVanChuyen'] = this.ELEMENT_DATA[0].tranportExitType;
+          //
+          this.originalData = this.ELEMENT_DATA;
+
+          console.log(this.originalData);
+        }           
+        else console.log('Không nhận được dữ liệu');        
+      }
+    ); 
   }
 
   CapNhatTrangThai(trangThai: number)
@@ -127,7 +160,7 @@ export class DetailPhieuNhapComponent implements OnInit{
       console.log('The dialog was closed');
       if (result !== undefined) // nếu chọn No là undefined
       {
-          this.api.putDetailsPhieuNhap(this.maPhieuNhap,this.trangthaiduyet).subscribe({
+          this.api.putDetailsPhieuXuat(this.maPhieuNhap,this.trangthaiduyet).subscribe({
             next: (response) => {
               console.log('Cập nhật thành công:', response);
               this.dataService.setData({TilteThongBao: "Thông báo", NoiDungThongBao : "Bạn đã cập nhật trạng thái thành công", LoaiThongBao: 2,idUser : this.idUser});
@@ -156,13 +189,13 @@ export class DetailPhieuNhapComponent implements OnInit{
 
     dialogRef.afterClosed()
     {
-       this.router.navigate(['/mainApp/phieuNhapcontainer']);
+      this.router.navigate(['/mainApp/phieuXuatContainer']);
     };
   }
 
   TroVePageChinh()
   {
-    this.router.navigate(['/mainApp/phieuNhapcontainer'])
+    this.router.navigate(['/mainApp/phieuXuatContainer']);
   }
-  
+
 }

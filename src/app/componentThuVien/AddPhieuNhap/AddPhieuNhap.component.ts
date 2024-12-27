@@ -36,8 +36,8 @@ import { loaiContainer } from '../../Model/LoaiContainer.model';
               MatSelectModule,
               MatTimepickerModule,
               MatDatepickerModule],
-  templateUrl: './add-phieu-nhap.component.html',
-  styleUrl: './add-phieu-nhap.component.css',
+  templateUrl: './AddPhieuNhap.component.html',
+  styleUrl: './AddPhieuNhap.component.css',
   providers: [provideNativeDateAdapter()],
   changeDetection: ChangeDetectionStrategy.OnPush
 })

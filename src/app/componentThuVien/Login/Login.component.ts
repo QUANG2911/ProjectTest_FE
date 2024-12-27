@@ -15,8 +15,8 @@ import { Login } from '../../Model/login.model';
 @Component({
   selector: 'app-login-in',
   imports: [MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule,MatSelectModule],
-  templateUrl: './login-in.component.html',
-  styleUrl: './login-in.component.css'
+  templateUrl: './Login.component.html',
+  styleUrl: './Login.component.css'
 })
 export class LoginInComponent{
   readonly dialog = inject(MatDialog);

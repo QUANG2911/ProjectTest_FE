@@ -15,65 +15,65 @@ export class ApiService {
 
   ////////////////////////////API CONTROLLER CONTAINER//////////////////////////////
   getContainers(): Observable<any> {
-    return this.http.get(this.baseUrl +'DanhSachContainer/GetDanhSachContainer');
+    return this.http.get(this.baseUrl +'ContainerManagement/GetContainerList');
   }
 
-  getDetailsContainer(id :number, ngayditoivitri :Date): Observable<any>
+  getDetailsContainer(id :number, dateOfEntryContainer :Date): Observable<any>
   {
-    return this.http.get(this.baseUrl + 'DanhSachContainer/GetChiTietContainer/'+ id+'/'+ngayditoivitri);
+    return this.http.get(this.baseUrl + 'ContainerManagement/GetInformationContainer/'+ id+'/'+dateOfEntryContainer);
   }
 
   getLoaiContainer()
   {
-    return this.http.get(this.baseUrl +'DanhSachContainer/getLoaiContainer');
+    return this.http.get(this.baseUrl +'ContainerManagement/GetContainerType');
   }
    ////////////////////////////API CONTROLLER PHIEU NHAP//////////////////////////////
   getDsPhieuNhap(userId :string): Observable<any>
   {
-    return this.http.get(this.baseUrl+'DanhSachPhieuDangKy/DanhSachPhieuNhap/'+ userId);
+    return this.http.get(this.baseUrl+'EntryContainerFormManagement/GetContainerEntryFormList/'+ userId);
   }
 
   getDetailsPhieuNhap( maPhieuNhap :string): Observable<any>
   {
-    return this.http.get(this.baseUrl + 'DanhSachPhieuDangKy/ThongTinPhieuNhap/'+maPhieuNhap);
+    return this.http.get(this.baseUrl + 'EntryContainerFormManagement/GetInformationContainerEntryForm/'+maPhieuNhap);
   }
 
   putDetailsPhieuNhap( maPhieuNhap :string, trangThai: number): Observable<any>
   {
-    return this.http.put(this.baseUrl + 'DanhSachPhieuDangKy/CapNhatTrangThaiPhieuNhap/'+maPhieuNhap + '/' +trangThai ,{});
+    return this.http.put(this.baseUrl + 'EntryContainerFormManagement/UpdateStatusContainerEntryForm/'+maPhieuNhap + '/' +trangThai ,{});
   }
 
   postNewPhieuNhap(userId: string, data: any): Observable<any>{    
-    return this.http.post<any>(this.baseUrl + 'DanhSachPhieuDangKy/CreatePhieuDangKyNhap/' + userId ,data);
+    return this.http.post<any>(this.baseUrl + 'EntryContainerFormManagement/CreateContainerEntryForm/' + userId ,data);
   }
 
 
    ////////////////////////////API CONTROLLER PHIEU XUAT//////////////////////////////
   GetDsPhieuXuat(userId: string): Observable<any>{    
-    return this.http.get(this.baseUrl + "DanhSachPhieuXuat/DanhSachPhieuXuat/" + userId);
+    return this.http.get(this.baseUrl + "ExitContainerFormManagement/GetContainerExitFormList/" + userId);
   }
 
   GetDetailPhieuXuat(maPhieu: string): Observable<any>{
-    return this.http.get(this.baseUrl+ "DanhSachPhieuXuat/DanhSachContainerXuat/" + maPhieu);
+    return this.http.get(this.baseUrl+ "ExitContainerFormManagement/GetInformationContainerExitForm/" + maPhieu);
   }
 
   putDetailsPhieuXuat( maPhieuXuat :string, trangThai: number): Observable<any>
   {
-    return this.http.put(this.baseUrl + 'DanhSachPhieuXuat/DuyetPhieuXuat/'+maPhieuXuat + '/' +trangThai ,{});
+    return this.http.put(this.baseUrl + 'ExitContainerFormManagement/UpdateStatusContainerExitForm/'+maPhieuXuat + '/' +trangThai ,{});
   }
 
   GetDsContainerCuaKhChuaXuat(userId: string)
   {
-    return this.http.get(this.baseUrl + "DanhSachPhieuXuat/DsContainerCuaUserTrongCang"+userId);
+    return this.http.get(this.baseUrl + "ExitContainerFormManagement/GetListContainerOfUserInSnp/"+userId);
   }
 
   postNewPhieuXuat(userId: string,idContainer: string, data: any): Observable<any>{    
-    return this.http.post<any>(this.baseUrl + 'DanhSachPhieuXuat/PhieuXuat/' + userId +'/'+idContainer,data);
+    return this.http.post<any>(this.baseUrl + 'ExitContainerFormManagement/CreateContainerExitForm/' + userId +'/'+idContainer,data);
   }
 
   ////////////////////////////////LOGIN////////////////////////////////
   GetThongTinLogin(userName: string, password: string)
   {
-    return this.http.get(this.baseUrl + "Login/GetThongTinDangNhap/"+userName + "/"+password);
+    return this.http.get(this.baseUrl + "Login/GetUserId/"+userName + "/"+password);
   }
 }

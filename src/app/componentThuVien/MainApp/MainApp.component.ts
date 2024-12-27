@@ -7,8 +7,8 @@ import { RouterOutlet } from '@angular/router';
 @Component({
   selector: 'app-main-app',
   imports: [SidenavComponent,BodyComponent],
-  templateUrl: './main-app.component.html',
-  styleUrl: './main-app.component.css'
+  templateUrl: './MainApp.component.html',
+  styleUrl: './MainApp.component.css'
 })
 export class MainAppComponent {
 

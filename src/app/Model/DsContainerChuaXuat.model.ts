@@ -1,16 +1,16 @@
 export class DsContainerChuaXuat {
     id!: number;
-    maContainer!: string;
-    tenLoai!: string;
+    idContainer!: string;
+    typeContainerName!: string;
     size!: number;      
-    ngayGiaoContainer!: Date;
+    dateOfEntryContainer!: Date;
   
-    constructor( id: number, maContainer: string,  tenLoai: string,  size: number, ngayGiaoContainer: Date)
+    constructor( id: number, idContainer: string,  typeContainerName: string,  size: number, dateOfEntryContainer: Date)
     {
       this.id = id;
-      this.maContainer = maContainer;
-      this.tenLoai = tenLoai;
+      this.idContainer = idContainer;
+      this.typeContainerName = typeContainerName;
       this.size = size;
-      this.ngayGiaoContainer = ngayGiaoContainer;
+      this.dateOfEntryContainer = dateOfEntryContainer;
     }
   }

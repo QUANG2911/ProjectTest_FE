@@ -1,15 +1,15 @@
 import { Routes } from '@angular/router';
 import { ContainerComponent } from './componentThuVien/container/container.component';
-import { DetailContainerComponent } from './componentThuVien/detail-container/detail-container.component';
+import { DetailContainerComponent } from './componentThuVien/DetailContainer/DetailContainer.component';
 import { SidenavComponent } from './componentThuVien/ThuVien/SideNav/SideNav.component';
-import { PhieuNhapContainerComponent } from './componentThuVien/phieu-nhap-container/phieu-nhap-container.component';
-import { DetailPhieuNhapComponent } from './componentThuVien/detail-phieu-nhap/detail-phieu-nhap.component';
-import { AddPhieuNhapComponent } from './componentThuVien/add-phieu-nhap/add-phieu-nhap.component';
-import { PhieuXuatContainerComponent } from './componentThuVien/phieu-xuat-container/phieu-xuat-container.component';
-import { DetailPhieuXuatComponent } from './componentThuVien/detail-phieu-xuat/detail-phieu-xuat.component';
-import { AddPhieuXuatComponent } from './componentThuVien/add-phieu-xuat/add-phieu-xuat.component';
-import { LoginInComponent } from './componentThuVien/login-in/login-in.component';
-import { MainAppComponent } from './componentThuVien/main-app/main-app.component';
+import { PhieuNhapContainerComponent } from './componentThuVien/PhieuNhapContainer/PhieuNhapContainer.component';
+import { DetailPhieuNhapComponent } from './componentThuVien/DetailPhieuNhap/DetailPhieuNhap.component';
+import { AddPhieuNhapComponent } from './componentThuVien/AddPhieuNhap/AddPhieuNhap.component';
+import { PhieuXuatContainerComponent } from './componentThuVien/PhieuXuatContainer/PhieuXuatContainer.component';
+import { DetailPhieuXuatComponent } from './componentThuVien/DetailPhieuXuat/DetailPhieuXuat.component';
+import { AddPhieuXuatComponent } from './componentThuVien/AddPhieuXuat/AddPhieuXuat.component';
+import { LoginInComponent } from './componentThuVien/Login/Login.component';
+import { MainAppComponent } from './componentThuVien/MainApp/MainApp.component';
 
 
 export const routes: Routes = [

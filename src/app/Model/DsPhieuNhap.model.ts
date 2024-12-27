@@ -1,20 +1,20 @@
 export class DsPhieuNhap {
-    maPhieuNhap!: string;
-    ngayDk!: string;
-    tenKh!: string;
-    sdt!: string;
-    ngayGiaoContainer!: Date;
-    trangThaiDuyet!: number;
+    idEntryForm!: string;
+    dateOfEntryRegistration!: string;
+    customerName!: string;
+    phoneNumber!: string;
+    dateOfEntryContainer!: Date;
+    status!: number;
     id!: number;
 
-    constructor( maPhieuNhap: string,  ngayDk: string,  tenKh: string, sdt: string,    ngayGiaoContainer: Date,  trangThaiDuyet: number, id: number)
+    constructor( idEntryForm: string,  dateOfEntryRegistration: string,  customerName: string, phoneNumber: string,    dateOfEntryContainer: Date,  status: number, id: number)
     {
-        this.maPhieuNhap = maPhieuNhap;
-        this.ngayDk = ngayDk;
-        this.tenKh = tenKh;
-        this.sdt = sdt;
-        this.ngayGiaoContainer = ngayGiaoContainer;
-        this.trangThaiDuyet = trangThaiDuyet;
+        this.idEntryForm = idEntryForm;
+        this.dateOfEntryRegistration = dateOfEntryRegistration;
+        this.customerName = customerName;
+        this.phoneNumber = phoneNumber;
+        this.dateOfEntryContainer = dateOfEntryContainer;
+        this.status = status;
         this.id = id;
     }
 }

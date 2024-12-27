@@ -94,7 +94,7 @@ export class ContainerComponent implements OnInit, AfterViewInit{
   }
 
   //thêm số lượng cột ở đây
-  displayedColumns: string[] = ['id','macontainer', 'tenkh', 'sdt','ngayDiToiViTri','ngayXuatCang','action'];
+  displayedColumns: string[] = ['macontainer', 'tenkh', 'sdt','dateOfEntryContainer','dateOfExitContainer','action'];
   dataSource: any;             
 
   originalData: DsContainer[] = []; 
@@ -107,7 +107,7 @@ export class ContainerComponent implements OnInit, AfterViewInit{
     if(this.item != null)
     {
       //live
-     this.dataSource.data = this.originalData.filter(p=>p.maContainer.toLowerCase().includes(this.item.toLowerCase()));
+     this.dataSource.data = this.originalData.filter(p=>p.idContainer.toLowerCase().includes(this.item.toLowerCase()));
     }
     else {
       this.dataSource.data = this.originalData;

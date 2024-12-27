@@ -1,21 +1,21 @@
 export class DsContainer {
     id!: number;
-    maContainer!: string;
+    idContainer!: string;
     numContainer!: string;
-    tenKh!: string;
-    sdt!: string;
-    ngayDiToiViTri!: Date;
-    ngayXuatCang!: Date;
+    customerName!: string;
+    phoneNumber!: string;
+    dateOfEntryContainer!: Date;
+    dateOfExitContainer!: Date;
   
-    constructor( id: number,maContainer: string,  numContainer: string,  tenKh: string, sdt: string,  ngayDiToiViTri: Date,  ngayXuatCang: Date)
+    constructor( id: number,idContainer: string,  numContainer: string,  customerName: string, phoneNumber: string,  dateOfEntryContainer: Date,  dateOfExitContainer: Date)
     {
       this.id = id;
-      this.maContainer = maContainer;
+      this.idContainer = idContainer;
       this.numContainer = numContainer;
-      this.tenKh = tenKh;
-      this.sdt = sdt;
-      this.ngayDiToiViTri = ngayDiToiViTri;
-      this.ngayXuatCang = ngayXuatCang;
+      this.customerName = customerName;
+      this.phoneNumber = phoneNumber;
+      this.dateOfEntryContainer = dateOfEntryContainer;
+      this.dateOfExitContainer = dateOfExitContainer;
     }
   }
 

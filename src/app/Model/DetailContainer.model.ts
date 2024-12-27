@@ -1,33 +1,33 @@
 export class DetailContainer {
-      maContainer!: string;
+      idContainer!: string;
       numContainer!: string;
-      maIso!: string;
-      loaiContainer!: string;
-      ngayDiToiViTri!: Date;
-      ngayXuatCang!: Date;
+      isoCode!: string;
+      typeContainer!: string;
+      dateOfEntryContainer!: Date;
+      dateOfExitContainer!: Date;
       size!: number;      
-      trongLuongRong!: number;
-      trongLuongTong!: string;
-      viTriHienTai!: string;
-      donViDuaToiCang!: string;
-      donViXuatCang!: string;
-      tinhTrang!: string;
+      tareWeight!: number;
+      maxWeight!: string;
+      locationContainer!: string;
+      transportEntryType!: string;
+      transportExitType!: string;
+      statusOfContainer!: string;
     
-      constructor( maContainer: string,  numContainer: string,  maIso: string, loaiContainer: string, ngayDiToiViTri: Date,  ngayXuatCang: Date, size: number, trongLuongRong: number, trongLuongTong: string, viTriHienTai: string,donViDuaToiCang: string,  donViXuatCang: string, tinhTrang: string)
+      constructor( idContainer: string,  numContainer: string,  isoCode: string, typeContainer: string, dateOfEntryContainer: Date,  dateOfExitContainer: Date, size: number, tareWeight: number, maxWeight: string, locationContainer: string,transportEntryType: string,  transportExitType: string, statusOfContainer: string)
       {
-        this.maContainer = maContainer;
+        this.idContainer = idContainer;
         this.numContainer = numContainer;
-        this.maIso = maIso;
-        this.loaiContainer = loaiContainer;
-        this.ngayDiToiViTri = ngayDiToiViTri;
+        this.isoCode = isoCode;
+        this.typeContainer = typeContainer;
+        this.dateOfEntryContainer = dateOfEntryContainer;
         this.size = size;
-        this.trongLuongRong = trongLuongRong;
-        this.trongLuongTong = trongLuongTong;
-        this.viTriHienTai = viTriHienTai;
-        this.ngayXuatCang = ngayXuatCang;
-        this.donViDuaToiCang =donViDuaToiCang;
-        this.donViXuatCang =donViXuatCang;
-        this.tinhTrang = tinhTrang;
+        this.tareWeight = tareWeight;
+        this.maxWeight = maxWeight;
+        this.locationContainer = locationContainer;
+        this.dateOfExitContainer = dateOfExitContainer;
+        this.transportEntryType =transportEntryType;
+        this.transportExitType =transportExitType;
+        this.statusOfContainer = statusOfContainer;
       }
     }
   

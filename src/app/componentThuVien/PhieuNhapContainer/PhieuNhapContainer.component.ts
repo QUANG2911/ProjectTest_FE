@@ -33,8 +33,8 @@ import { DropDownListComponent } from '../ThuVien/DropDownList/DropDownList.comp
 @Component({
   selector: 'app-phieu-nhap-container',
   imports: [DropDownListComponent,MatFormFieldModule,MatSelectModule, MatOptionModule,MatInputModule,MatButtonModule,MatIconModule,MatPaginator,MatSort,MatSortModule, MatTableModule,MatPaginatorModule,CommonModule,RouterModule,FormsModule],
-  templateUrl: './phieu-nhap-container.component.html',
-  styleUrl: './phieu-nhap-container.component.css',
+  templateUrl: './PhieuNhapContainer.component.html',
+  styleUrl: './PhieuNhapContainer.component.css',
 })
 export class PhieuNhapContainerComponent implements OnInit, AfterViewInit{
   
@@ -133,7 +133,7 @@ export class PhieuNhapContainerComponent implements OnInit, AfterViewInit{
   }
 
   //thêm số lượng cột ở đây
-  displayedColumns: string[] = ['maphieunhap','ngayDk', 'tenkh', 'sdt','ngayGiaoContainer','trangthaiduyet','action'];
+  displayedColumns: string[] = ['maphieunhap','dateOfEntryRegistration', 'tenkh', 'sdt','dateOfEntryRegistration','trangthaiduyet','action'];
   dataSource: any;             
 
   originalData: DsPhieuNhap[] = []; 
@@ -145,7 +145,7 @@ export class PhieuNhapContainerComponent implements OnInit, AfterViewInit{
     this.item = maphieunhap.value;
     if(this.item != null)
     {
-      this.dataSource.data = this.originalData.filter(p=>p.maPhieuNhap.toLowerCase().includes(this.item.toLowerCase()));
+      this.dataSource.data = this.originalData.filter(p=>p.idEntryForm.toLowerCase().includes(this.item.toLowerCase()));
     }
     else {
       this.dataSource.data = this.originalData;
@@ -158,7 +158,7 @@ export class PhieuNhapContainerComponent implements OnInit, AfterViewInit{
     console.log(TrangThai);
     if(TrangThai == 1  || TrangThai == 0 || TrangThai == -1)
     {
-      this.dataSource.data = this.originalData.filter( p=> p.trangThaiDuyet == TrangThai);
+      this.dataSource.data = this.originalData.filter( p=> p.status == TrangThai);
     }
     else{
       this.dataSource.data = this.originalData;

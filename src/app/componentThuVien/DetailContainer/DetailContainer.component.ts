@@ -15,8 +15,8 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-detail-container',
   imports: [MatFormFieldModule,FormsModule,MatIconModule,FormsModule,CommonModule],
-  templateUrl: './detail-container.component.html',
-  styleUrl: './detail-container.component.css'
+  templateUrl: './DetailContainer.component.html',
+  styleUrl: './DetailContainer.component.css'
 })
 export class DetailContainerComponent implements OnInit {
 
@@ -62,26 +62,27 @@ export class DetailContainerComponent implements OnInit {
     if(id != 0)
     {
       this.api.getDetailsContainer(id,ngayditoivitri).subscribe(
-        (data) =>{          
+        (data) =>{         
+          console.log(data); 
             this.ELEMENT_DATA = data as DetailContainer;
-            this.dataDetail["donViDuaToiCang"] = this.ELEMENT_DATA.donViDuaToiCang;
-            this.dataDetail["donViXuatCang"] = this.ELEMENT_DATA.donViXuatCang;
-            this.dataDetail["loaiContainer"] = this.ELEMENT_DATA.loaiContainer;
-            this.dataDetail["maIso"] = this.ELEMENT_DATA.maIso;
-            this.dataDetail["ngayditoivitri"] = formatDate(this.ELEMENT_DATA.ngayDiToiViTri,'dd-MM-YYYY, giờ: HH:mm:ss','en-US');
-            if(this.ELEMENT_DATA.ngayXuatCang)
+            this.dataDetail["donViDuaToiCang"] = this.ELEMENT_DATA.transportEntryType;
+            this.dataDetail["donViXuatCang"] = this.ELEMENT_DATA.transportExitType;
+            this.dataDetail["loaiContainer"] = this.ELEMENT_DATA.typeContainer;
+            this.dataDetail["maIso"] = this.ELEMENT_DATA.isoCode;
+            this.dataDetail["ngayditoivitri"] = formatDate(this.ELEMENT_DATA.dateOfEntryContainer,'dd-MM-YYYY, giờ: HH:mm:ss','en-US');
+            if(this.ELEMENT_DATA.dateOfExitContainer != null)
             {
-              this.dataDetail["ngayxuatcang"] =  formatDate(this.ELEMENT_DATA.ngayXuatCang,'dd-MM-YYYY, giờ: HH:mm:ss','en-US');
+              this.dataDetail["ngayxuatcang"] =  formatDate(this.ELEMENT_DATA.dateOfExitContainer,'dd-MM-YYYY, giờ: HH:mm:ss','en-US');
             }else
             {
-              this.dataDetail["ngayxuatcang"] =  this.ELEMENT_DATA.ngayXuatCang;
+              this.dataDetail["ngayxuatcang"] =  this.ELEMENT_DATA.dateOfExitContainer;
             }            
             this.dataDetail["numcontainer"] = this.ELEMENT_DATA.numContainer;
             this.dataDetail["size"] = this.ELEMENT_DATA.size;
-            this.dataDetail["tinhTrang"] = this.ELEMENT_DATA.tinhTrang;
-            this.dataDetail["viTriHienTai"] = this.ELEMENT_DATA.viTriHienTai;
-            this.dataDetail["trongLuongRong"] = this.ELEMENT_DATA.trongLuongRong;
-            this.dataDetail["trongLuongTong"] = this.ELEMENT_DATA.trongLuongTong;
+            this.dataDetail["tinhTrang"] = this.ELEMENT_DATA.statusOfContainer;
+            this.dataDetail["viTriHienTai"] = this.ELEMENT_DATA.locationContainer;
+            this.dataDetail["trongLuongRong"] = this.ELEMENT_DATA.tareWeight;
+            this.dataDetail["trongLuongTong"] = this.ELEMENT_DATA.maxWeight;
 
             console.log(this.dataDetail);
         }

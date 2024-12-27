@@ -36,8 +36,8 @@ import { DsPhieuXuat } from '../../Model/DsPhieuXuat.model';
 @Component({
   selector: 'app-phieu-xuat-container',
   imports: [DropDownListComponent,MatFormFieldModule,MatSelectModule, MatOptionModule,MatInputModule,MatButtonModule,MatIconModule,MatPaginator,MatSortModule, MatTableModule,MatPaginatorModule,CommonModule,RouterModule,FormsModule],
-  templateUrl: './phieu-xuat-container.component.html',
-  styleUrl: './phieu-xuat-container.component.css'
+  templateUrl: './PhieuXuatContainer.component.html',
+  styleUrl: './PhieuXuatContainer.component.css'
 })
 export class PhieuXuatContainerComponent implements OnInit{
   
@@ -136,7 +136,7 @@ export class PhieuXuatContainerComponent implements OnInit{
   }
 
   //thêm số lượng cột ở đây
-  displayedColumns: string[] = ['maphieuxuat','ngayLamPhieu', 'tenKh', 'sdt','ngayXuat','trangthaiduyet','action'];
+  displayedColumns: string[] = ['maphieuxuat','dateOfExitRegistration', 'tenKh', 'sdt','dateOfExitContainer','trangthaiduyet','action'];
   dataSource: any;             
 
   originalData: DsPhieuXuat[] = []; 
@@ -147,7 +147,7 @@ export class PhieuXuatContainerComponent implements OnInit{
     this.item = maphieuxuat.value;
     if(this.item != null)
     {
-      this.dataSource.data = this.originalData.filter(p=>p.maPhieuXuat.toLowerCase().includes(this.item.toLowerCase()));
+      this.dataSource.data = this.originalData.filter(p=>p.idExitForm.toLowerCase().includes(this.item.toLowerCase()));
     }
     else {
       this.dataSource.data = this.originalData;
@@ -160,7 +160,7 @@ export class PhieuXuatContainerComponent implements OnInit{
     console.log(TrangThai);
     if(TrangThai == 1  || TrangThai == 0 || TrangThai == -1)
     {
-      this.dataSource.data = this.originalData.filter( p=> p.trangThaiDuyet == TrangThai);
+      this.dataSource.data = this.originalData.filter( p=> p.status == TrangThai);
     }
     else{
       this.dataSource.data = this.originalData;

@@ -28,41 +28,35 @@
         <table mat-table [dataSource]="dataSource" class="mat-elevation-z8"
               matSort (matSortChange)="announceSortChange($event)"    
         >
-            <ng-container matColumnDef="id" class="hidden-column">
-              <th mat-header-cell *matHeaderCellDef> No.</th>
-              <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-            </ng-container>
-            
-
             <!-- Position Column -->
             <ng-container matColumnDef="macontainer">
               <th mat-header-cell *matHeaderCellDef> Số container </th>
-              <td mat-cell *matCellDef="let element"> {{element.maContainer}} </td>
+              <td mat-cell *matCellDef="let element"> {{element.idContainer}} </td>
             </ng-container>
           
           
             <!-- Công ty Column -->
             <ng-container matColumnDef="tenkh">
               <th mat-header-cell *matHeaderCellDef> Công ty </th>
-              <td mat-cell *matCellDef="let element"> {{element.tenKh}} </td>
+              <td mat-cell *matCellDef="let element"> {{element.numContainer}} </td>
             </ng-container>
           
             <!-- Số điện thoại Column -->
             <ng-container matColumnDef="sdt">
               <th mat-header-cell *matHeaderCellDef> Số điện thoại </th>
-              <td mat-cell *matCellDef="let element"> {{element.sdt}} </td>
+              <td mat-cell *matCellDef="let element"> {{element.phoneNumber}} </td>
             </ng-container>
 
             <!-- Ngày nhập công Column -->
-            <ng-container matColumnDef="ngayDiToiViTri">
+            <ng-container matColumnDef="dateOfEntryContainer">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Ngày nhập cảng </th>
-                <td mat-cell *matCellDef="let element">{{element.ngayDiToiViTri | date:'dd/MM/YYYY' }}</td>
+                <td mat-cell *matCellDef="let element">{{element.dateOfEntryContainer | date:'dd/MM/YYYY' }}</td>
             </ng-container>
 
             <!-- Ngày xuất cảng Column -->
-            <ng-container matColumnDef="ngayXuatCang">
+            <ng-container matColumnDef="dateOfExitContainer">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Ngày xuất cảng </th>
-                <td mat-cell *matCellDef="let element"> {{element.ngayXuatCang | date:'dd/MM/YYYY'}}</td>
+                <td mat-cell *matCellDef="let element"> {{element.dateOfExitContainer | date:'dd/MM/YYYY'}}</td>
             </ng-container>
           
             <!-- button action Column -->
@@ -70,7 +64,7 @@
                 <th mat-header-cell *matHeaderCellDef> Action </th>
                 <td mat-cell *matCellDef="let element">
                     <button mat-fab extended class="button"
-                      (click) = "TransformDetailPageContainer(element.id,element.maContainer,element.ngayDiToiViTri)" 
+                      (click) = "TransformDetailPageContainer(element.id,element.idContainer,element.dateOfEntryContainer)" 
                       routerLink= "/mainApp/detailContainer"                                          
                     >                        
                       <div class="button-title">

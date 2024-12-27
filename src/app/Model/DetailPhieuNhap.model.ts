@@ -1,32 +1,32 @@
 export class DetailPhieuNhap {
     id!: number;
-    maContainer!: string;
+    idContainer!: string;
     numContainer!: string;
-    maIso!: string;
-    loaiContainer!: string;
-    ngayVanChuyenToiCang!: Date;
+    isoCode!: string;
+    typeContainer!: string;
+    dateOfContainerEntry!: Date;
     size!: number;      
-    trongLuongRong!: number;
-    tongTrongLuong!: string;
-    bienSoDonViVanChuyen!: string;
-    loaiHinhThucVanChuyen!: string;
-    maPhieuNhap!: string;
-    ngaySanXuat!: Date;
+    tareWeight!: number;
+    maxWeight!: string;
+    transportEntryLicensePlate!: string;
+    transportEntryType!: string;
+    idEntryForm!: string;
+    dateOfManufacture!: Date;
   
-    constructor( id: number, maContainer: string,  numContainer: string,  maIso: string, loaiContainer: string, ngayVanChuyenToiCang: Date,  size: number, trongLuongRong: number, tongTrongLuong: string, bienSoDonViVanChuyen: string,loaiHinhThucVanChuyen: string,  maPhieuNhap: string,ngaySanXuat: Date)
+    constructor( id: number, idContainer: string,  numContainer: string,  isoCode: string, typeContainer: string, dateOfContainerEntry: Date,  size: number, tareWeight: number, maxWeight: string, transportEntryLicensePlate: string,transportEntryType: string,  idEntryForm: string,dateOfManufacture: Date)
     {
       this.id = id;
-      this.maContainer = maContainer;
+      this.idContainer = idContainer;
       this.numContainer = numContainer;
-      this.maIso = maIso;
-      this.loaiContainer = loaiContainer;
-      this.ngayVanChuyenToiCang = ngayVanChuyenToiCang;
+      this.isoCode = isoCode;
+      this.typeContainer = typeContainer;
+      this.dateOfContainerEntry = dateOfContainerEntry;
       this.size = size;
-      this.trongLuongRong = trongLuongRong;
-      this.tongTrongLuong = tongTrongLuong;
-      this.bienSoDonViVanChuyen = bienSoDonViVanChuyen;
-      this.loaiHinhThucVanChuyen =loaiHinhThucVanChuyen;
-      this.maPhieuNhap = maPhieuNhap;
-      this.ngaySanXuat = ngaySanXuat;
+      this.tareWeight = tareWeight;
+      this.maxWeight = maxWeight;
+      this.transportEntryLicensePlate = transportEntryLicensePlate;
+      this.transportEntryType =transportEntryType;
+      this.idEntryForm = idEntryForm;
+      this.dateOfManufacture = dateOfManufacture;
     }
   }

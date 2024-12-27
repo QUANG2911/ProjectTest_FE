@@ -54,8 +54,8 @@ import {ThongTinPhieuXuat } from '../../Model/ThongTinPhieuXuat.model';
             MatPaginator, MatPaginatorModule,
             MatSort, MatSortModule,
             MatCardModule, MatCheckboxModule, FormsModule],
-  templateUrl: './add-phieu-xuat.component.html',
-  styleUrl: './add-phieu-xuat.component.css',
+  templateUrl: './AddPhieuXuat.component.html',
+  styleUrl: './AddPhieuXuat.component.css',
   providers: [provideNativeDateAdapter()],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -77,7 +77,7 @@ export class AddPhieuXuatComponent implements OnInit{
 
   ELEMENT_DATA: DsContainerChuaXuat[] = [];
 
-  displayedColumns: string[] = ['macontainer','size','tenloai','ngaygiaocontainer','choose'];
+  displayedColumns: string[] = ['macontainer','size','tenloai','typeContainerName','choose'];
   dataSource: any;             
 
   idContainer: string = "";
@@ -132,6 +132,7 @@ export class AddPhieuXuatComponent implements OnInit{
       this.dataSource.sort = this.sort;
     },500); // Giả lập thời gian tải dữ liệu
   }
+  
   getContainerChuaXuat(idUser: string)
   {
     this.api.GetDsContainerCuaKhChuaXuat(idUser)
@@ -139,6 +140,7 @@ export class AddPhieuXuatComponent implements OnInit{
       (data) => {
         if(data != null)
         {
+          console.log(data);
           this.ELEMENT_DATA = data as DsContainerChuaXuat[];
 
           // nạp dữ liệu vào table

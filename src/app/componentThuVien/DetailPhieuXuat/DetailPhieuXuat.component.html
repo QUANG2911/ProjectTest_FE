@@ -18,7 +18,7 @@
             <!-- Position Column -->
             <ng-container matColumnDef="macontainer">
               <th mat-header-cell *matHeaderCellDef> Số container </th>
-              <td mat-cell *matCellDef="let element"> {{element.maContainer}} </td>
+              <td mat-cell *matCellDef="let element"> {{element.idContainer}} </td>
             </ng-container>
 
             <!-- Position Column -->
@@ -30,13 +30,13 @@
             <!-- Position Column -->
             <ng-container matColumnDef="tenloai">
                 <th mat-header-cell *matHeaderCellDef> Loại container </th>
-                <td mat-cell *matCellDef="let element"> {{element.tenLoai}} </td>
+                <td mat-cell *matCellDef="let element"> {{element.typeContainerName}} </td>
               </ng-container>
             
             <!-- Ngày nhập công Column -->
-            <ng-container matColumnDef="ngaygiaocontainer">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header ngaygiaocontainer> Ngày nhập cảng </th>
-                <td mat-cell *matCellDef="let element">{{element.ngaygiaocontainer | date:'dd/MM/YYYY' }}</td>
+            <ng-container matColumnDef="dateOfEntryContainer">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header dateOfEntryContainer> Ngày nhập cảng </th>
+                <td mat-cell *matCellDef="let element">{{element.dateOfEntryContainer | date:'dd/MM/YYYY' }}</td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
