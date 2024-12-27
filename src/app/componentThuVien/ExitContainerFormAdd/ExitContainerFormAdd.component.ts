@@ -31,12 +31,12 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 // khai báo sort
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSort, Sort,MatSortModule } from '@angular/material/sort';
-import { DsContainerChuaXuat } from '../../Model/DsContainerChuaXuat.model';
+import { ContainerInSnpList } from '../../Model/ContainerInSnpList.model';
 
 import {MatCardModule} from '@angular/material/card';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {selectList } from '../../Model/SelectList.model';
-import {ThongTinPhieuXuat } from '../../Model/ThongTinPhieuXuat.model';
+import {ExitContainerFormToCreateNew } from '../../Model/ExitContainerFormToCreateNew.model';
 
 @Component({
   selector: 'app-add-phieu-xuat',
@@ -54,13 +54,13 @@ import {ThongTinPhieuXuat } from '../../Model/ThongTinPhieuXuat.model';
             MatPaginator, MatPaginatorModule,
             MatSort, MatSortModule,
             MatCardModule, MatCheckboxModule, FormsModule],
-  templateUrl: './AddPhieuXuat.component.html',
-  styleUrl: './AddPhieuXuat.component.css',
+  templateUrl: './ExitContainerFormAdd.component.html',
+  styleUrl: './ExitContainerFormAdd.component.css',
   providers: [provideNativeDateAdapter()],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class AddPhieuXuatComponent implements OnInit{
+export class ExitContainerFormAddComponent implements OnInit{
     
 
   constructor( 
@@ -73,16 +73,16 @@ export class AddPhieuXuatComponent implements OnInit{
 
   idUser: string ="";
 
-  InputPhieuXuat!: ThongTinPhieuXuat;
+  exitContainerFormToCreateNew!: ExitContainerFormToCreateNew;
 
-  ELEMENT_DATA: DsContainerChuaXuat[] = [];
+  ELEMENT_DATA: ContainerInSnpList[] = [];
 
-  displayedColumns: string[] = ['macontainer','size','tenloai','typeContainerName','choose'];
+  displayedColumns: string[] = ['idContainer','size','typeContainerName','dateOfEntryContainer','choose'];
   dataSource: any;             
 
   idContainer: string = "";
 
-  originalData: DsContainerChuaXuat[] = []; 
+  originalData: ContainerInSnpList[] = []; 
   
   private _liveAnnouncer = inject(LiveAnnouncer);
 
@@ -102,26 +102,27 @@ export class AddPhieuXuatComponent implements OnInit{
      }
    }
 
-  getDulieuDsPhieuNhap()
+  getDataFormExitForm()
   {
     this.dataService.getData();
     this.dataService.currentData.subscribe(data =>{
       if(data != null)  
       {
         this.idUser = data.idUser;
-        this.idContainer = data.idContainer;
       }        
       else 
         console.log("Không có idUser truyền qua");
     })
   }
   private _formBuilder = inject(FormBuilder);
-  private loaiPhuongTienVanChuyen: string = "";
+  private transportType: string = "";
 
+  
+  readonly dialog = inject(MatDialog);
   ngOnInit(): void {
-    this.getDulieuDsPhieuNhap();
-    this.getContainerChuaXuat(this.idUser);
-    this.setItemsToShow(this.loaiPhuongTienVanChuyen);
+    this.getDataFormExitForm();
+    this.getContainerInSnp(this.idUser);
+    this.setItemsToShow(this.transportType);
     this.fetchData();
   }
 
@@ -133,7 +134,7 @@ export class AddPhieuXuatComponent implements OnInit{
     },500); // Giả lập thời gian tải dữ liệu
   }
   
-  getContainerChuaXuat(idUser: string)
+  getContainerInSnp(idUser: string)
   {
     this.api.GetDsContainerCuaKhChuaXuat(idUser)
     .subscribe(
@@ -141,10 +142,10 @@ export class AddPhieuXuatComponent implements OnInit{
         if(data != null)
         {
           console.log(data);
-          this.ELEMENT_DATA = data as DsContainerChuaXuat[];
+          this.ELEMENT_DATA = data as ContainerInSnpList[];
 
           // nạp dữ liệu vào table
-          this.dataSource = new MatTableDataSource<DsContainerChuaXuat>(this.ELEMENT_DATA);
+          this.dataSource = new MatTableDataSource<ContainerInSnpList>(this.ELEMENT_DATA);
 
         }           
         else console.log('Không nhận được dữ liệu');        
@@ -165,16 +166,16 @@ export class AddPhieuXuatComponent implements OnInit{
   selectALL = false;
   itemsToShow: number[] = [];
 
-  LuuThongTinDonViVanChuyen(inputPhuongTienVanChuyen: any)
+  GetTransportType(inputTransportType: any)
   {
-    this.loaiPhuongTienVanChuyen = inputPhuongTienVanChuyen.value;
-    // console.log(this.loaiPhuongTienVanChuyen);
+    this.transportType = inputTransportType.value;
+    // console.log(this.transportType);
 
-    this.setItemsToShow(this.loaiPhuongTienVanChuyen);
+    this.setItemsToShow(this.transportType);
   }
 
-  setItemsToShow(loaiPhuongTienVanChuyen: any) {
-    if (loaiPhuongTienVanChuyen == 'Tàu') {
+  setItemsToShow(transportType: any) {
+    if (transportType == 'Tàu') {
       this.itemsToShow = [1]; 
     }
   }
@@ -230,20 +231,19 @@ export class AddPhieuXuatComponent implements OnInit{
       total = this.dsSelectContainer.reduce((sum,item) => sum + item.size,0);
     }
   
-    if(this.loaiPhuongTienVanChuyen == 'Xe' && total > 40)
+    if(this.transportType == 'Xe' && total > 40)
     {
-      this.dataService.setData({TilteThongBao: "Cảnh báo", maNhap: "", NoiDungThongBao : "Với loại hình phương tiện xe chỉ được xuất container dưới 40 feet trên 1 truyến", LoaiThongBao: 2, idUser: this.idUser});
-      this.openDialog('0ms', '0ms');  
+      this.GetNotification("Cảnh báo","Với loại hình phương tiện xe chỉ được xuất container dưới 40 feet trên 1 truyến",2,'500px',false);  
     }
   }
 
   //////////////////////////
 
 
-  LAYSOLIEU(InputNgayXuat: any, InputThoiGianXuat: any,inputBienSo: any, inputPhuongTienVanChuyen: any)
+  FetchDataForApi(inputDateOfExit: any, inputTimeOfExit: any,inputTransportLiscence: any, inputTransportType: any)
   {
     
-    const thoiGianXuat =  this.formatDate.combineDateAndTime(InputNgayXuat.value,InputThoiGianXuat.value) as Date;
+    const thoiGianXuat =  this.formatDate.combineDateAndTime(inputDateOfExit.value,inputTimeOfExit.value) as Date;
     
     const currentData = new Date();    
 
@@ -251,85 +251,118 @@ export class AddPhieuXuatComponent implements OnInit{
     {
       this.idContainer = this.dsSelectContainer[i].id + "," +this.idContainer;
     }
-    console.log(this.dsSelectContainer);
-    console.log(this.idContainer);
 
-    if (InputNgayXuat== null || InputThoiGianXuat== null ||inputBienSo == null || inputPhuongTienVanChuyen == null)
+    
+    let width: string = '300px';
+    let susscess: boolean = false;
+    let title: string = '';
+    let content: string = '';
+    let typeNotification: number = 2;
+
+    if (inputDateOfExit.value === '' || inputTimeOfExit.value === '' ||inputTransportLiscence.value === '' || inputTransportType.value === '')
     {
-      this.dataService.setData({TilteThongBao: "Cảnh báo", maNhap: "", NoiDungThongBao : "Bạn vui lòng điền đầy đủ thông tin", LoaiThongBao: 2,idUser: this.idUser,idContainer:this.idContainer});
-      this.openDialog('0ms', '0ms');      
+      title = "Cảnh báo";
+      content = "Bạn vui lòng điền đầy đủ thông tin";
     }
     else if(thoiGianXuat.getTime() <= currentData.getTime())
     {
-      this.dataService.setData({TilteThongBao: "Cảnh báo", maNhap: "", NoiDungThongBao : "Bạn vui lòng điền lại ngày xuất container không thể nhỏ hơn hay bằng ngày hiện tại", LoaiThongBao: 2,idUser: this.idUser,idContainer:this.idContainer});
-      this.openDialog('0ms', '0ms');     
+      title = "Cảnh báo";
+      width = '500px';
+      content = "Bạn vui lòng điền lại ngày xuất container không thể nhỏ hơn hay bằng ngày hiện tại";   
     }
     else if(this.dsSelectContainer.length == 0)
     {
-      this.dataService.setData({TilteThongBao: "Cảnh báo", maNhap: "", NoiDungThongBao : "Bạn vui lòng chọn số lượng container muốn xuất", LoaiThongBao: 2,idUser: this.idUser,idContainer:this.idContainer});
-      this.openDialog('0ms', '0ms');   
+      title = "Cảnh báo";
+      width = '400px';
+      content = "Bạn vui lòng chọn số lượng container muốn xuất";   
     }
     else{
-      this.InputPhieuXuat = new ThongTinPhieuXuat(
+      this.exitContainerFormToCreateNew = new ExitContainerFormToCreateNew(
                                             thoiGianXuat,                                        
-                                            inputBienSo.value,
-                                            inputPhuongTienVanChuyen.value,);
-      console.log(this.InputPhieuXuat);
-      this.dataService.setData({TilteThongBao: "Tạo phiếu", maNhap: "", NoiDungThongBao : "Bạn có chắc muốn tạo đơn này", LoaiThongBao: 1,idUser: this.idUser,idContainer:this.idContainer });
-      this.openDialogApi('0ms', '0ms');
+                                            inputTransportLiscence.value,
+                                            inputTransportType.value,);
+      console.log(this.exitContainerFormToCreateNew);
+      title = "Tạo phiếu";
+      width = '300px';
+      content = "Bạn có chắc muốn tạo đơn này";
+      typeNotification = 1;      
+      susscess = true;
     }
-  }
-
-  readonly dialog = inject(MatDialog);
-
-  openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
-      const dialogRef =this.dialog.open(ThongBaoComponent, {
-      width: '600px',
-      enterAnimationDuration,
-      exitAnimationDuration,
-    });
-  }
-
-  openDialogOut(enterAnimationDuration: string, exitAnimationDuration: string): void {
-      const dialogRef =this.dialog.open(ThongBaoComponent, {
-      width: '300px',
-      enterAnimationDuration,
-      exitAnimationDuration,
-    });
+    this.GetNotification(title,content,typeNotification,width,susscess);
   }
 
 
-  openDialogApi(enterAnimationDuration: string, exitAnimationDuration: string): void {
-    const dialogRef =this.dialog.open(ThongBaoComponent, {
-      width: '300px',
-      enterAnimationDuration,
-      exitAnimationDuration,
-    });
+
+  // openDialogApi(enterAnimationDuration: string, exitAnimationDuration: string): void {
+  //   const dialogRef =this.dialog.open(ThongBaoComponent, {
+  //     width: '300px',
+  //     enterAnimationDuration,
+  //     exitAnimationDuration,
+  //   });
 
 
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log('The dialog was closed');
-      if (result !== undefined) // nếu chọn No là undefined
-      {
-        console.log("tạo thành công");
+  //   dialogRef.afterClosed().subscribe((result) => {
+  //     console.log('The dialog was closed');
+  //     if (result !== undefined) // nếu chọn No là undefined
+  //     {
+  //       console.log("tạo thành công");
        
-        console.log(this.idContainer);
-        this.api.postNewPhieuXuat(this.idUser,this.idContainer,this.InputPhieuXuat).subscribe(
-          (reponse) => {
-            console.log("Api thành công: "+reponse);
-            this.dataService.setData({TilteThongBao: "Thông báo", maNhap: "", NoiDungThongBao : "Tạo đơn phiếu mới thành công", LoaiThongBao: 2,idUser: this.idUser});
-            this.openDialogOut('0ms', '0ms');
-            this.router.navigate(['/mainApp/phieuXuatContainer']);
-          },
-          (error) =>{
-            console.log("Lỗi api post: " +error);
-          }
-        );
-      }
-      else
-      {
-        console.log("xem xét tiếp")
-      }
+  //       console.log(this.idContainer);
+  //       this.api.postNewPhieuXuat(this.idUser,this.idContainer,this.exitContainerFormToCreateNew).subscribe(
+  //         (reponse) => {
+  //           console.log("Api thành công: "+reponse);
+  //           this.dataService.setData({TilteThongBao: "Thông báo", maNhap: "", NoiDungThongBao : "Tạo đơn phiếu mới thành công", LoaiThongBao: 2,idUser: this.idUser});
+  //           this.openDialogOut('0ms', '0ms');
+  //           this.router.navigate(['/mainApp/ExitContainerForm']);
+  //         },
+  //         (error) =>{
+  //           console.log("Lỗi api post: " +error);
+  //         }
+  //       );
+  //     }
+  //     else
+  //     {
+  //       console.log("xem xét tiếp")
+  //     }
+  //   });
+  // } 
+
+  GetNotification(title: string, content: string, typeNotification : number, width: string, susscess: boolean)
+  {
+    this.dataService.setData({TilteThongBao: title, maNhap: "", NoiDungThongBao : content, LoaiThongBao: typeNotification,idUser: this.idUser,idContainer:this.idContainer });
+    this.openDialogApi('0ms', '0ms',width,susscess);
+  }
+
+  openDialogApi(enterAnimationDuration: string, exitAnimationDuration: string, width: string, susscess: boolean): void {
+    const dialogRef =this.dialog.open(ThongBaoComponent, {
+      width: width,
+      enterAnimationDuration,
+      exitAnimationDuration,
     });
+
+    if(susscess == true)
+    {
+      dialogRef.afterClosed().subscribe((result) => {
+        console.log('The dialog was closed');
+        if (result !== undefined) // nếu chọn No là undefined
+        {
+          console.log("tạo thành công");
+          this.api.postNewPhieuXuat(this.idUser,this.idContainer,this.exitContainerFormToCreateNew).subscribe(
+            (reponse) => {
+              console.log("Api thành công: "+reponse);
+              this.GetNotification("Thông báo","Tạo phiếu xuất thành công",2,'400px',false);
+              this.router.navigate(['/mainApp/ExitContainerForm']);
+            },
+            (error) =>{
+                console.log("Lỗi api post: " +error);
+            }
+          );
+        }
+        else
+        {
+          console.log("xem xét tiếp")
+        }
+      });
+    }
   } 
 }

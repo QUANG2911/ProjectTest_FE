@@ -1,4 +1,4 @@
-export class ThongTinPhieuXuat {
+export class ExitContainerFormToCreateNew {
     DateOfExitContainer!: Date;
     TransportExitLicensePlate!: string;
     TransportExitType!: string;

@@ -1,4 +1,4 @@
-export class DetailPhieuNhap {
+export class EntryContainerFormInformation {
     id!: number;
     idContainer!: string;
     numContainer!: string;

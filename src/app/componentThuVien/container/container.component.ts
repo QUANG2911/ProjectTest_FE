@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy,Component, OnInit, ViewChild, inject } from '@angular/core';
-import { DsContainer } from '../../Model/DsContainer.model';
+import { ContainerList } from '../../Model/ContainerList.model';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule} from '@angular/material/form-field';
@@ -27,8 +27,8 @@ import { ApiService } from '../../Service/ApiService';
 @Component({
   selector: 'app-container',
   imports: [CommonModule, MatSortModule, MatTableModule, MatPaginatorModule, MatIconModule, FormsModule, MatFormFieldModule, FormsModule, RouterModule],
-  templateUrl: './container.component.html',
-  styleUrl: './container.component.css',
+  templateUrl: './Container.component.html',
+  styleUrl: './Container.component.css',
   changeDetection: ChangeDetectionStrategy.Default
 })
 
@@ -42,7 +42,7 @@ export class ContainerComponent implements OnInit, AfterViewInit{
               private api :ApiService,
              ){}
   
-  ELEMENT_DATA: DsContainer[] = []
+  ELEMENT_DATA: ContainerList[] = []
   
   // hàm sắp xếp
   @ViewChild(MatSort) sort!: MatSort;
@@ -60,9 +60,9 @@ export class ContainerComponent implements OnInit, AfterViewInit{
       (data) => {
         if(data.length > 0)
         {
-          this.ELEMENT_DATA = data as DsContainer[];
+          this.ELEMENT_DATA = data as ContainerList[];
           // nạp dữ liệu vào table
-          this.dataSource = new MatTableDataSource<DsContainer>(this.ELEMENT_DATA);
+          this.dataSource = new MatTableDataSource<ContainerList>(this.ELEMENT_DATA);
           //
           this.originalData = this.ELEMENT_DATA;
 
@@ -97,7 +97,7 @@ export class ContainerComponent implements OnInit, AfterViewInit{
   displayedColumns: string[] = ['macontainer', 'tenkh', 'sdt','dateOfEntryContainer','dateOfExitContainer','action'];
   dataSource: any;             
 
-  originalData: DsContainer[] = []; 
+  originalData: ContainerList[] = []; 
   
   
    // hàm sreach  

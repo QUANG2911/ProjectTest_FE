@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { BodyComponent } from '../body/body.component';
+import { BodyComponent } from '../Body/Body.component';
 import { SidenavComponent } from '../ThuVien/SideNav/SideNav.component';
 import { SideNavToggle } from '../../Model/SideNavToggle.Model';
-import { RouterOutlet } from '@angular/router';
+
 
 @Component({
   selector: 'app-main-app',

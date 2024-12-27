@@ -1,8 +1,8 @@
-<h1 style="  margin-bottom: 2px;   margin-top: -27px;">Phiếu xuất {{maPhieuNhap}}</h1>
+<h1 style="  margin-bottom: 2px;   margin-top: -27px;">Phiếu xuất {{idExitForm}}</h1>
 <div class="card">
     <div class="card-head">
         <p class="head-title">Danh sách container đăng ký xuất</p>
-        <a class="goBack-head" (click)="TroVePageChinh()">
+        <a class="goBack-head" (click)="ReturnExitPage()">
             Go back
         </a>
     </div>
@@ -16,7 +16,7 @@
             </ng-container>
             
             <!-- Position Column -->
-            <ng-container matColumnDef="macontainer">
+            <ng-container matColumnDef="idContainer">
               <th mat-header-cell *matHeaderCellDef> Số container </th>
               <td mat-cell *matCellDef="let element"> {{element.idContainer}} </td>
             </ng-container>
@@ -28,7 +28,7 @@
               </ng-container>
             
             <!-- Position Column -->
-            <ng-container matColumnDef="tenloai">
+            <ng-container matColumnDef="typeContainerName">
                 <th mat-header-cell *matHeaderCellDef> Loại container </th>
                 <td mat-cell *matCellDef="let element"> {{element.typeContainerName}} </td>
               </ng-container>
@@ -74,7 +74,7 @@
   </div>
   <div class="card-button" *ngIf="showItem(1)">
     <button mat-fab extended class="button" 
-      (click)="CapNhatTrangThai(1)"                                         
+      (click)="UpdateStatus(1)"                                         
     >                        
       <div class="button-title">
         <mat-icon class="button-icon">assignment_turned_in</mat-icon>
@@ -82,7 +82,7 @@
       </div>
     </button>
     <button mat-fab extended class="button" 
-      (click)="CapNhatTrangThai(-1)"                                         
+      (click)="UpdateStatus(-1)"                                         
     >                        
       <div class="button-title">
         <mat-icon class="button-icon">assignment_late</mat-icon>

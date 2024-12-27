@@ -1,4 +1,4 @@
-export class DsContainer {
+export class ContainerList {
     id!: number;
     idContainer!: string;
     numContainer!: string;

@@ -7,8 +7,8 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-body',
   imports: [RouterModule, CommonModule],
-  templateUrl: './body.component.html',
-  styleUrl: './body.component.css'
+  templateUrl: './Body.component.html',
+  styleUrl: './Body.component.css'
 })
 export class BodyComponent{
   

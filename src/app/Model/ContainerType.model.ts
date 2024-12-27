@@ -1,4 +1,4 @@
-export class loaiContainer {
+export class ContainerType {
     maLoai!: string;
     tenLoai!: string;
 

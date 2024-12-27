@@ -19,7 +19,7 @@ import {Router, RouterModule} from '@angular/router'; // dung routerLink
 // khai báo sort
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSort, Sort,MatSortModule } from '@angular/material/sort';
-import { DsPhieuNhap } from '../../Model/DsPhieuNhap.model';
+
 import { FormsModule } from '@angular/forms';
 
 
@@ -29,26 +29,26 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input'; // Nếu cần nhập liệu
 import { MatButtonModule } from '@angular/material/button'; // Nếu có sử dụng button
 import { DropDownListComponent } from '../ThuVien/DropDownList/DropDownList.component';
+import { ExitContainerFormList } from '../../Model/ExitContainerFormList.model';
+
+
 
 @Component({
-  selector: 'app-phieu-nhap-container',
-  imports: [DropDownListComponent,MatFormFieldModule,MatSelectModule, MatOptionModule,MatInputModule,MatButtonModule,MatIconModule,MatPaginator,MatSort,MatSortModule, MatTableModule,MatPaginatorModule,CommonModule,RouterModule,FormsModule],
-  templateUrl: './PhieuNhapContainer.component.html',
-  styleUrl: './PhieuNhapContainer.component.css',
+  selector: 'app-phieu-xuat-container',
+  imports: [DropDownListComponent,MatFormFieldModule,MatSelectModule, MatOptionModule,MatInputModule,MatButtonModule,MatIconModule,MatPaginator,MatSortModule, MatTableModule,MatPaginatorModule,CommonModule,RouterModule,FormsModule],
+  templateUrl: './ExitContainerForm.component.html',
+  styleUrl: './ExitContainerForm.component.css'
 })
-export class PhieuNhapContainerComponent implements OnInit, AfterViewInit{
+export class ExitContainerFormComponent implements OnInit{
   
-
-  idUser: string = "";  
-
-  item!: string; 
+  idUser: string = '';  
 
   constructor(private dataService :DataService,
               private api :ApiService,
               private router : Router
              ){}
   
-  ELEMENT_DATA: DsPhieuNhap[] = [];
+  ELEMENT_DATA: ExitContainerFormList[] = [];
   
   // hàm sắp xếp
   private _liveAnnouncer = inject(LiveAnnouncer);
@@ -58,7 +58,7 @@ export class PhieuNhapContainerComponent implements OnInit, AfterViewInit{
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   isLoading: boolean = false;
-
+         
   itemsToShow: number[] = [];
 
   setItemsToShow() {
@@ -72,25 +72,25 @@ export class PhieuNhapContainerComponent implements OnInit, AfterViewInit{
   }
 
   //Lấy dữ liệu từ API
-  getListContainer(): void{
+  getListExitForm(): void{
     this.isLoading = true;
-    this.api.getDsPhieuNhap(this.idUser)
+    this.api.GetDsPhieuXuat(this.idUser)
     .subscribe(
       (data) => {
         if(data.length > 0)
         {
-          this.ELEMENT_DATA = data as DsPhieuNhap[];
+          this.ELEMENT_DATA = data as ExitContainerFormList[];
 
           // nạp dữ liệu vào table
-          this.dataSource = new MatTableDataSource<DsPhieuNhap>(this.ELEMENT_DATA);
+          this.dataSource = new MatTableDataSource<ExitContainerFormList>(this.ELEMENT_DATA);
           //
           this.originalData = this.ELEMENT_DATA;
 
           console.log(this.originalData);
 
           //select trạng thái
-          this.getDulieuTrangThai()
-      
+          this.getListWithStatus()
+          
           this.isLoading = false;
         }           
         else console.log('Không nhận được dữ liệu');        
@@ -98,7 +98,7 @@ export class PhieuNhapContainerComponent implements OnInit, AfterViewInit{
     ); 
   }
 
-  getDulieuTrangThai()
+  getListWithStatus()
   {
       this.dataService.getData();
 
@@ -106,46 +106,42 @@ export class PhieuNhapContainerComponent implements OnInit, AfterViewInit{
       {
         if(data.selectOption != null)
         {
-          this.DanhSachTrangThai(data.selectOption);
-        }   
-        console.log(data.selectOption);  
+          this.StatusList(data.selectOption);
+        }        
       });
   }
 
   ngOnInit(): void {
     this.idUser = this.dataService.getUserId();
     console.log("Phieu Nhap:" + this.idUser);
+    this.getListExitForm();
     this.setItemsToShow();
-    this.getListContainer();
   }
-  
+
   fetchData() {
     // Mô phỏng việc lấy dữ liệu từ API
     setTimeout(() => {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-    },500); // Giả lập thời gian tải dữ liệu
+    },300); // Giả lập thời gian tải dữ liệu
   }
-
 
   ngAfterViewInit(): void {
     this.fetchData();
   }
 
   //thêm số lượng cột ở đây
-  displayedColumns: string[] = ['maphieunhap','dateOfEntryRegistration', 'tenkh', 'sdt','dateOfEntryRegistration','trangthaiduyet','action'];
+  displayedColumns: string[] = ['idExitForm','dateOfExitRegistration', 'customerName', 'phoneNumber','dateOfExitContainer','status','action'];
   dataSource: any;             
 
-  originalData: DsPhieuNhap[] = []; 
+  originalData: ExitContainerFormList[] = []; 
   
-  
-   // hàm sreach  
-  SearchMaContainer(maphieunhap: any): void
+  // hàm sreach  
+  SearchIdExitForm(idExitForm: any): void
   {
-    this.item = maphieunhap.value;
-    if(this.item != null)
+    if(idExitForm.value != null)
     {
-      this.dataSource.data = this.originalData.filter(p=>p.idEntryForm.toLowerCase().includes(this.item.toLowerCase()));
+      this.dataSource.data = this.originalData.filter(p=>p.idExitForm.toLowerCase().includes(idExitForm.value.toLowerCase()));
     }
     else {
       this.dataSource.data = this.originalData;
@@ -153,12 +149,12 @@ export class PhieuNhapContainerComponent implements OnInit, AfterViewInit{
   }
 
   // select Trạng thái
-  DanhSachTrangThai(TrangThai: any):void
+  StatusList(status: any):void
   {
-    console.log(TrangThai);
-    if(TrangThai == 1  || TrangThai == 0 || TrangThai == -1)
+    console.log(status);
+    if(status == 1  || status == 0 || status == -1)
     {
-      this.dataSource.data = this.originalData.filter( p=> p.status == TrangThai);
+      this.dataSource.data = this.originalData.filter( p=> p.status == status);
     }
     else{
       this.dataSource.data = this.originalData;
@@ -175,20 +171,20 @@ export class PhieuNhapContainerComponent implements OnInit, AfterViewInit{
   }
   tam :any;
   // ham chuyen page detail
-  TransformDetailPhieuNhapPage(maPhieuNhap: string, trangthaiduyet: number): void{  
-    if(maPhieuNhap != null) 
+  TransformExitFormDetailPage(idExitForm: string, status: number): void{  
+    if(idExitForm != null) 
     {
-      this.dataService.setData({maNhap: maPhieuNhap, trangthaiduyet: trangthaiduyet,idUser :this.idUser});
-      this.router.navigate(['/mainApp/detailPhieuNhap']);
+      this.dataService.setData({idExitForm: idExitForm, status: status,idUser :this.idUser});
+      this.router.navigate(['/mainApp/ExitContainerFormDetail']);
     }      
     else 
-      console.log('maNhap is null');
+      console.log('maXuat is null');
   }
 
   //ham chuyen page add
-  ChuyenPageAdd(){
+  TransformExitFormAddPage(){
     this.dataService.setData({idUser :this.idUser})
-    this.router.navigate(['/mainApp/addPhieuNhap'])
+    console.log(this.idUser);
+    this.router.navigate(['/mainApp/ExitContainerFormAdd'])
   }
-
 }

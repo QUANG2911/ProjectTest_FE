@@ -12,7 +12,7 @@ import { ThongBaoComponent } from '../ThuVien/Notice/Notice.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { MatTableDataSource,MatTableModule } from '@angular/material/table';
-import { DetailPhieuXuat } from '../../Model/DetailPhieuXuat.model';
+import { ExitContainerFormInformation } from '../../Model/ExitContainerFormInformation.model';
 import { MatSort, Sort, MatSortModule} from '@angular/material/sort';
 import { LiveAnnouncer} from '@angular/cdk/a11y';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -20,10 +20,10 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 @Component({
   selector: 'app-detail-phieu-xuat',
   imports: [MatFormFieldModule,FormsModule,MatIconModule,FormsModule,CommonModule,MatButtonModule,MatTableModule,MatPaginatorModule,MatSortModule],
-  templateUrl: './DetailPhieuXuat.component.html',
-  styleUrl: './DetailPhieuXuat.component.css'
+  templateUrl: './ExitContainerFormDetail.component.html',
+  styleUrl: './ExitContainerFormDetail.component.css'
 })
-export class DetailPhieuXuatComponent implements OnInit{
+export class ExitContainerFormDetailComponent implements OnInit{
   
   dataDetail: { [key: string]: string | number |Date}={};
 
@@ -36,29 +36,22 @@ export class DetailPhieuXuatComponent implements OnInit{
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   // keyDetail = Detail;
   
-   // mũi tên hiện sắp xếp
-   announceSortChange(sortState: Sort) {
-    if (sortState.direction) {
-      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
-    } else {
-      this._liveAnnouncer.announce('Sorting cleared');
-    }
-  }
-
   keyTrans = ContainerTransport.filter(p =>p.field === 'ngayxuatcang' || p.field === 'donViXuatCang' || p.field === 'sdt' || p.field == 'bienSoDonViVanChuyen');
   // lấy dữ liệu của API gửi lên
-  maPhieuNhap : string ="";
-  trangthaiduyet: number = 0;
+  idExitForm : string ="";
+  status: number = 0;
   idUser: string ="";
 
   itemsToShow: number[] = [];
 
-  ELEMENT_DATA: DetailPhieuXuat[] = [];
+  ELEMENT_DATA: ExitContainerFormInformation[] = [];
 
-  displayedColumns: string[] = ['macontainer','size','tenloai','dateOfEntryContainer'];
+  displayedColumns: string[] = ['idContainer','size','typeContainerName','dateOfEntryContainer'];
   dataSource: any;             
 
-  originalData: DetailPhieuXuat[] = []; 
+  readonly dialog = inject(MatDialog);
+
+  originalData: ExitContainerFormInformation[] = []; 
   
   constructor(
               private dataService :DataService,
@@ -76,13 +69,22 @@ export class DetailPhieuXuatComponent implements OnInit{
     return this.itemsToShow.includes(item);
   }
 
-  getDuLieuTuDsPhieu()
+   // mũi tên hiện sắp xếp
+   announceSortChange(sortState: Sort) {
+    if (sortState.direction) {
+      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
+    } else {
+      this._liveAnnouncer.announce('Sorting cleared');
+    }
+  }
+
+  getDataFormExitFormPage()
   {
     this.dataService.getData();
     this.dataService.currentData.subscribe((data) => {
       if (data) {  // Kiểm tra data 
-        this.maPhieuNhap = data.maNhap;
-        this.trangthaiduyet = data.trangthaiduyet;
+        this.idExitForm = data.idExitForm;
+        this.status = data.status;
         this.idUser = data.idUser;
       }
       else {
@@ -91,9 +93,9 @@ export class DetailPhieuXuatComponent implements OnInit{
     });
   }
   ngOnInit(): void {      
-    this.getDuLieuTuDsPhieu(); 
-    this.setItemsToShow(this.trangthaiduyet, this.idUser);
-    this.getDetailsPhieu(this.maPhieuNhap);
+    this.getDataFormExitFormPage(); 
+    this.setItemsToShow(this.status, this.idUser);
+    this.getDetailsExitFormApi(this.idExitForm);
     this.fetchData();
   }
 
@@ -105,7 +107,7 @@ export class DetailPhieuXuatComponent implements OnInit{
     },300); // Giả lập thời gian tải dữ liệu
   }
 
-  getDetailsPhieu(maPhieuNhap: string)
+  getDetailsExitFormApi(maPhieuNhap: string)
   {
     this.api.GetDetailPhieuXuat(maPhieuNhap)
     .subscribe(
@@ -113,10 +115,10 @@ export class DetailPhieuXuatComponent implements OnInit{
         if(data != null)
         {
           console.log(data);
-          this.ELEMENT_DATA = data as DetailPhieuXuat[];
+          this.ELEMENT_DATA = data as ExitContainerFormInformation[];
 
           // nạp dữ liệu vào table
-          this.dataSource = new MatTableDataSource<DetailPhieuXuat>(this.ELEMENT_DATA);
+          this.dataSource = new MatTableDataSource<ExitContainerFormInformation>(this.ELEMENT_DATA);
 
           this.dataDetail['ngayxuatcang'] = formatDate(this.ELEMENT_DATA[0].dateOfExitContainer,'dd-MM-YYYY, giờ: HH:mm:ss','en-US');
           this.dataDetail['donViXuatCang'] = this.ELEMENT_DATA[0].tranportExitType;
@@ -132,70 +134,78 @@ export class DetailPhieuXuatComponent implements OnInit{
     ); 
   }
 
-  CapNhatTrangThai(trangThai: number)
+  UpdateStatus(status: number)
   {
-    this.trangthaiduyet = trangThai;
-    if(trangThai == 1)
+    this.status = status;
+    let width: string = '300px';
+    let susscess: boolean = true;
+    let title: string = '';
+    let content: string = '';
+    let typeNotification: number = 1;
+    if(status == 1)
     {
-      this.dataService.setData({TilteThongBao: "Duyệt đơn", maNhap: this.maPhieuNhap, NoiDungThongBao : "Bạn có muốn duyệt đơn này", LoaiThongBao: 1, trangthaiduyet: 1,idUser : this.idUser});
+      width = '400px';
+      title = "Duyệt đơn";
+      content = "Bạn có muốn duyệt đơn này";
     }
-    else if (trangThai == -1)
+    else if (status == -1)
     {
-      this.dataService.setData({TilteThongBao: "Từ chối đơn ", maNhap: this.maPhieuNhap, NoiDungThongBao : "Bạn có chắc từ chối đơn này", LoaiThongBao: 1,trangthaiduyet: -1,idUser : this.idUser});
+      
+      width = '400px';
+      title = "Từ chối đơn";
+      content = "Bạn có chắc từ chối đơn này";
     }
-    this.openDialog('0ms', '0ms');
+    console.log("idExitForm" + this.idExitForm);
+    
+    this.GetNotification(title,content,typeNotification,width,susscess);
   }
 
-  readonly dialog = inject(MatDialog);
+  GetNotification(title: string, content: string, typeNotification : number, width: string, susscess: boolean)
+  {
+    this.dataService.setData({TilteThongBao: title, idExitForm: this.idExitForm, NoiDungThongBao : content, LoaiThongBao: typeNotification,status: this.status, idUser : this.idUser});
+    this.openDialog('0ms', '0ms',width,susscess);
+    console.log("idExitForm" + this.idExitForm);
+  }
 
-  openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
+  openDialog(enterAnimationDuration: string, exitAnimationDuration: string,width: string,susscess: boolean): void {
     const dialogRef =this.dialog.open(ThongBaoComponent, {
-      width: '300px',
+      width: width,
       enterAnimationDuration,
       exitAnimationDuration,
-      data: {maPhieuNhap :this.maPhieuNhap, trangThai: this.trangthaiduyet}
+      data: {idExitForm :this.idExitForm, trangThai: this.status}
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log('The dialog was closed');
-      if (result !== undefined) // nếu chọn No là undefined
-      {
-          this.api.putDetailsPhieuXuat(this.maPhieuNhap,this.trangthaiduyet).subscribe({
-            next: (response) => {
-              console.log('Cập nhật thành công:', response);
-              this.dataService.setData({TilteThongBao: "Thông báo", NoiDungThongBao : "Bạn đã cập nhật trạng thái thành công", LoaiThongBao: 2,idUser : this.idUser});
-              this.ThongBaoCapNhat('0ms', '0ms');              
-            },
-            error: (error) => {
-              window.alert('Đã xảy ra lỗi duyệt phiếu! Vui lòng thử lại.');
-              console.error('Lỗi khi cập nhật:', error);
-            }
-          });
-        console.log(result.maPhieuNhap);
-        console.log(this.maPhieuNhap + this.trangthaiduyet);
-      }
-      else
-      {
-        this.trangthaiduyet = 0;
-        console.log(result.maPhieuNhap);
-      }
-    });
-  } 
-
-  ThongBaoCapNhat(enterAnimationDuration: string, exitAnimationDuration: string): void {
-    const dialogRef =this.dialog.open(ThongBaoComponent, {
-      width: '400px'
-    });
-
-    dialogRef.afterClosed()
+    if(susscess == true)
     {
-      this.router.navigate(['/mainApp/phieuXuatContainer']);
-    };
-  }
-
-  TroVePageChinh()
+      dialogRef.afterClosed().subscribe((result) => {
+        console.log('The dialog was closed');
+        if (result !== undefined) // nếu chọn No là undefined
+        {
+            this.api.putDetailsPhieuXuat(this.idExitForm,this.status).subscribe({
+              next: (response) => {
+                console.log('Cập nhật thành công:', response);    
+                this.GetNotification("Thông báo","Bạn đã cập nhật trạng thái thành công",2,'400px',false);       
+                this.ReturnExitPage();
+              },
+              error: (error) => {
+                window.alert('Đã xảy ra lỗi duyệt phiếu! Vui lòng thử lại.');
+                console.error('Lỗi khi cập nhật:', error);
+              }
+            });
+          console.log(result.idExitForm);
+          console.log(this.idExitForm + this.status);
+        }
+        else
+        {
+          this.status = 0;
+          console.log(result.idEntryForm);
+        }
+      });
+    }
+  } 
+  ReturnExitPage()
   {
-    this.router.navigate(['/mainApp/phieuXuatContainer']);
+    this.router.navigate(['/mainApp/ExitContainerForm']);
   }
 
 }

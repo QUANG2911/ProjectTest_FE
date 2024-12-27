@@ -1,8 +1,8 @@
-<h1 style="  margin-bottom: 2px;   margin-top: -27px;">Phiếu nhập {{maPhieuNhap}}</h1>
+<h1 style="  margin-bottom: 2px;   margin-top: -27px;">Phiếu nhập {{idEntryForm}}</h1>
 <div class="card">
     <div class="card-head">
         <p class="head-title">Thông tin chi tiết</p>
-        <a class="goBack-head" (click)="TroVePageChinh()">
+        <a class="goBack-head" (click)="ReturnEntryPage()">
             Go back
         </a>
     </div>
@@ -49,7 +49,7 @@
   </div>
   <div class="card-button" *ngIf="showItem(1)">
     <button mat-fab extended class="button" 
-      (click)="CapNhatTrangThai(1)"                                         
+      (click)="UpdateStatus(1)"                                         
     >                        
       <div class="button-title">
         <mat-icon class="button-icon">assignment_turned_in</mat-icon>
@@ -57,7 +57,7 @@
       </div>
     </button>
     <button mat-fab extended class="button" 
-      (click)="CapNhatTrangThai(-1)"                                         
+      (click)="UpdateStatus(-1)"                                         
     >                        
       <div class="button-title">
         <mat-icon class="button-icon">assignment_late</mat-icon>

@@ -1,4 +1,4 @@
-export class DsPhieuNhap {
+export class EntryContainerFormList {
     idEntryForm!: string;
     dateOfEntryRegistration!: string;
     customerName!: string;

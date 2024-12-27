@@ -9,7 +9,6 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
-import { Console, error } from 'console';
 import {MatSelectModule} from '@angular/material/select';
 import { Login } from '../../Model/login.model';
 @Component({
@@ -19,33 +18,57 @@ import { Login } from '../../Model/login.model';
   styleUrl: './Login.component.css'
 })
 export class LoginInComponent{
+  //Khai báo các biến 
+  ////// thông báo dialog
   readonly dialog = inject(MatDialog);
 
+ //// khai báo biến để lấy dữ liệu từ API và lưu dữ liệu chuyền qua các component khác
   constructor(
     private dataService :DataService,
     private api :ApiService,
     private router: Router
    ){}
-   
+  
+  ///// khai báo nút ẩn hiện password
   hide = signal(true);
+
   clickEvent(event: MouseEvent) {
     this.hide.set(!this.hide());
     event.stopPropagation();
   }
+  
+  ///// khai báo biến để hứng dữ liệu từ api
   userLogin!: Login ;
 
-  kiemTraDangNhap(Username: string, Pass: string, loaiTk: string)
+  //Hàm thực hiện sự kiện click button Login
+  Login(inputUser : any ,inputPass : any, inputLoaiTk: any){
+    console.log(inputLoaiTk.value);
+    if(inputUser.value.trim() === '' || inputPass.value.trim() === '')
+    {
+      this.GetNotification("Vui lòng điền đầy đủ Username và Password");
+    }      
+    else if(inputLoaiTk.value === undefined)
+    {
+      this.GetNotification("Vui lòng chọn loại tài khoản đăng nhập");
+    }
+    else{
+      this.CheckUserLogin(inputUser.value,inputPass.value,inputLoaiTk.value)
+    }
+  }
+
+  //Hàm kiểm tra thông tin đăng nhập
+  CheckUserLogin(Username: string, Pass: string, typeAccount: string)
   {
-    this.api.GetThongTinLogin(Username,Pass).subscribe(
+    this.api.GetUserLogin(Username,Pass).subscribe(
       (data) => {
       console.log(data);
       this.userLogin = data as Login;
-        console.log(loaiTk);
-        if(loaiTk === 'kh')
+
+        if(typeAccount === 'customer')
         {
           if(this.userLogin.maKH === null)
           {            
-            this.GetThongBao("Không tồn tại tài khoản khách hàng này");
+            this.GetNotification("Không tồn tại tài khoản khách hàng này");
           }
           else
           {
@@ -58,7 +81,7 @@ export class LoginInComponent{
         {
           if(this.userLogin.maNv === null)
             {
-              this.GetThongBao("Không tồn tại tài khoản nhân viên này");
+              this.GetNotification("Không tồn tại tài khoản nhân viên này");
             }
             else
             {
@@ -66,34 +89,18 @@ export class LoginInComponent{
               console.log("login manv: " + this.userLogin.maNv);
               this.router.navigate(['/mainApp']);
             }
-        }
-        
+        }  
       },(error) =>{
-        this.GetThongBao("Không tồn tại tài khoản này");
+        this.GetNotification("Không tồn tại tài khoản này");
       }
    )
   }
 
-  GetThongBao(noiDungThongBao: string){
+  //Hàm thông báo
+  GetNotification(noiDungThongBao: string){
     this.dataService.setData({TilteThongBao: "Thông báo", NoiDungThongBao : noiDungThongBao, LoaiThongBao: 2});
     this.openDialog('0ms', '0ms');
   }
-
-  Login(inputUser : any ,inputPass : any, inputLoaiTk: any){
-    console.log(inputLoaiTk.value);
-    if(inputUser.value.trim() === '' || inputPass.value.trim() === '')
-    {
-      this.GetThongBao("Vui lòng điền đầy đủ Username và Password");
-    }      
-    else if(inputLoaiTk.value === undefined)
-    {
-      this.GetThongBao("Vui lòng chọn loại tài khoản đăng nhập");
-    }
-    else{
-      this.kiemTraDangNhap(inputUser.value,inputPass.value,inputLoaiTk.value)
-    }
-  }
-
   
   openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
     const dialogRef =this.dialog.open(ThongBaoComponent, {

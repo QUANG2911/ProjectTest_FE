@@ -23,7 +23,7 @@ export class ApiService {
     return this.http.get(this.baseUrl + 'ContainerManagement/GetInformationContainer/'+ id+'/'+dateOfEntryContainer);
   }
 
-  getLoaiContainer()
+  getContainerType()
   {
     return this.http.get(this.baseUrl +'ContainerManagement/GetContainerType');
   }
@@ -72,7 +72,7 @@ export class ApiService {
   }
 
   ////////////////////////////////LOGIN////////////////////////////////
-  GetThongTinLogin(userName: string, password: string)
+  GetUserLogin(userName: string, password: string)
   {
     return this.http.get(this.baseUrl + "Login/GetUserId/"+userName + "/"+password);
   }

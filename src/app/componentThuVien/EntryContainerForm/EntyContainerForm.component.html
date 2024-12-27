@@ -1,10 +1,11 @@
-<h1>Danh sách Phiếu xuất Containers - {{idUser}}</h1>
+ <h1>Danh sách Phiếu nhập Containers - {{idUser}}</h1>
   <div class="card">
       <div class="card-head">
-          <div class="head-title">
+          <div class="head-title" >
             <button mat-fab extended class="button"  
-                (click)="ChuyenPageAdd()"                                    
+                (click)="TransEntryContainerFormAddPage()"                                    
             >                        
+                <router-outlet></router-outlet>
                 <div class="button-title" style="width: 100px;" *ngIf="showItem(1)">
                     <mat-icon class="button-icon" style="margin: 0px 4px 0 8px;">note_add</mat-icon>
                     <span>Tạo đơn</span> 
@@ -14,9 +15,9 @@
           <div class="head-content-left">
               <div class="search-container">
                   <div class="normal-sreach">
-                      <input #inputMaPhieu
+                      <input #inputIdEntryForm
                           type = "search" class="sreach"  placeholder="Mã phiếu"
-                          (input)="SearchMaContainer(inputMaPhieu)"
+                          (input)="SearchIdEntryForm(inputIdEntryForm)"
                       />
                       <mat-icon class="sreach-icon">find_in_page</mat-icon>
                   </div>
@@ -38,49 +39,49 @@
                         matSort (matSortChange)="announceSortChange($event)"    
                 >
                     <!-- mã phiếu Column -->
-                    <ng-container matColumnDef="maphieuxuat">
-                        <th mat-header-cell *matHeaderCellDef> Mã phiếu xuất </th>
-                        <td mat-cell *matCellDef="let element"> {{element.idExitForm}} </td>
+                    <ng-container matColumnDef="idEntryForm">
+                        <th mat-header-cell *matHeaderCellDef> Mã phiếu nhập </th>
+                        <td mat-cell *matCellDef="let element"> {{element.idEntryForm}} </td>
                     </ng-container>              
                                         
                     <!-- Công ty Column -->
-                    <ng-container matColumnDef="tenKh">
+                    <ng-container matColumnDef="customerName">
                         <th mat-header-cell *matHeaderCellDef> Công ty </th>
                         <td mat-cell *matCellDef="let element"> {{element.customerName}} </td>
                     </ng-container>
                     
                     <!-- Số điện thoại Column -->
-                    <ng-container matColumnDef="sdt">
+                    <ng-container matColumnDef="phoneNumber">
                         <th mat-header-cell *matHeaderCellDef> Số điện thoại </th>
                         <td mat-cell *matCellDef="let element"> {{element.phoneNumber}} </td>
                     </ng-container>
         
                     <!-- Ngày đăng ký phiếu Column -->
-                    <ng-container matColumnDef="dateOfExitRegistration">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by dateOfExitRegistration"> Ngày làm đơn </th>
-                        <td mat-cell *matCellDef="let element"> {{element.dateOfExitRegistration | date:'dd/MM/YYYY'}}</td>
+                    <ng-container matColumnDef="dateOfEntryRegistration">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by dateOfEntryRegistration"> Ngày làm đơn </th>
+                        <td mat-cell *matCellDef="let element"> {{element.dateOfEntryRegistration | date:'dd/MM/YYYY'}}</td>
                     </ng-container>
 
                     <!-- Ngày nhập công Column -->
-                    <ng-container matColumnDef="dateOfExitContainer">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by dateOfExitContainer"> Ngày xuất cảng </th>
-                        <td mat-cell *matCellDef="let element">{{element.dateOfExitContainer | date:'dd/MM/YYYY' }}</td>
+                    <ng-container matColumnDef="dateOfEntryContainer">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by dateOfEntryContainer"> Ngày nhập cảng </th>
+                        <td mat-cell *matCellDef="let element">{{element.dateOfEntryContainer | date:'dd/MM/YYYY' }}</td>
                     </ng-container>
 
                     <!-- Trạng thái duyệt Column -->
-                    <ng-container matColumnDef="trangthaiduyet">
+                    <ng-container matColumnDef="status">
                         <th mat-header-cell *matHeaderCellDef> Trạng thái duyệt </th>
                         <td mat-cell *matCellDef="let element"> 
-                            <div class="DaDuyet" *ngIf="element.status === 1;else caseCho">
+                            <div class="DaDuyet" *ngIf="element.status=== 1;else caseCho">
                                 <span class="title-duyet">Đã duyệt</span>
                             </div>    
                             <ng-template #caseCho>
-                                <div class="ChoDuyet" *ngIf="element.status === 0;else caseHuy"> 
+                                <div class="ChoDuyet" *ngIf="element.status=== 0;else caseHuy"> 
                                   <span class="title-cho">Đang chờ</span>  
                                 </div>
                             </ng-template>
                             <ng-template #caseHuy>
-                                <div class="DaHuy" *ngIf="element.status === -1">
+                                <div class="DaHuy" *ngIf="element.status=== -1">
                                     <span class="title-huy">Từ chối</span>  
                                 </div>
                             </ng-template>
@@ -92,7 +93,7 @@
                         <th mat-header-cell *matHeaderCellDef> Action </th>
                         <td mat-cell *matCellDef="let element">
                             <button mat-fab extended class="button"
-                                (click) = "TransformDetailPhieuXuatPage(element.idExitForm,element.status)"                                        
+                                (click) = "TransEntryContainerFormDetailPage(element.idEntryForm,element.status)"                                        
                             >                        
                                 <div class="button-title">
                                 <mat-icon class="button-icon">description</mat-icon>
@@ -104,11 +105,11 @@
         
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                    </table>      
+                    </table>
             </div>
-             <!-- nút page xử lý -->
+            <!-- nút page xử lý -->
             <!-- <mat-paginator [pageSizeOptions]=  "[5, 10, 20]" -->
-                <mat-paginator [pageSizeOptions]="[8]"
+            <mat-paginator [pageSizeOptions]="[8]"
                 showFirstLastButtons
                 aria-label="Select page of periodic elements">
             </mat-paginator>

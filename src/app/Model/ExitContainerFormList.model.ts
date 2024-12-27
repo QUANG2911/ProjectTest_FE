@@ -1,4 +1,4 @@
-export class DsPhieuXuat {
+export class ExitContainerFormList {
     idExitForm!: string;
     dateOfExitRegistration!: string;
     dateOfExitContainer!: Date;

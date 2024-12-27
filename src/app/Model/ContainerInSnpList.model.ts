@@ -1,4 +1,4 @@
-export class DsContainerChuaXuat {
+export class ContainerInSnpList {
     id!: number;
     idContainer!: string;
     typeContainerName!: string;

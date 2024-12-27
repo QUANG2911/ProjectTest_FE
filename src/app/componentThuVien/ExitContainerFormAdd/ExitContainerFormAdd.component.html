@@ -8,7 +8,7 @@
                 <div class="InputTem2">
                     <mat-form-field>
                         <mat-label>Phương tiện vận xuất container</mat-label>
-                        <mat-select #inputPhuongTienVanChuyen >
+                        <mat-select #inputTransportType >
                             <mat-option value="Tàu">Tàu</mat-option>
                             <mat-option value="Xe">Xe</mat-option>
                         </mat-select>
@@ -16,20 +16,20 @@
 
                     <mat-form-field>
                         <mat-label>Biển số/ số hiệu phương tiện vận chuyển</mat-label>
-                        <input matInput placeholder="Ex:20xx-xxx" formControlName="firstCtrl" #inputBienSo>
+                        <input matInput placeholder="Ex:20xx-xxx" formControlName="firstCtrl" #inputTransportLiscence>
                     </mat-form-field>
 
                     <!-- mỗi component chỉ chứa một mã tên của datePicker nên phải gán bên từng datePick ở đây -->
                     <mat-form-field>
                         <mat-label>Ngày xuất cảng</mat-label> 
-                            <input matInput [matDatepicker]="NgayToiCang" formControlName="firstCtrl" #InputNgayXuat >
+                            <input matInput [matDatepicker]="NgayToiCang" formControlName="firstCtrl" #inputDateOfExit >
                             <mat-datepicker #NgayToiCang/>
                             <mat-datepicker-toggle [for]="NgayToiCang" matSuffix/>
                     </mat-form-field>  
                     
                     <mat-form-field>
                         <mat-label>Giờ xuất cảng</mat-label>
-                            <input matInput  #InputThoiGianXuat                             
+                            <input matInput  #inputTimeOfExit                             
                             [matTimepicker]="timepicker"                      
                             formControlName="firstCtrl"     
                             required                        
@@ -39,7 +39,7 @@
                     </mat-form-field>
                 </div>                
                 <div>
-                    <button mat-button matStepperNext (click)="LuuThongTinDonViVanChuyen(inputPhuongTienVanChuyen)">Next</button>
+                    <button mat-button matStepperNext (click)="GetTransportType(inputTransportType)">Next</button>
                 </div>
             </form>
         </mat-step>
@@ -56,7 +56,7 @@
                         </ng-container>
                         
                         <!-- Position Column -->
-                        <ng-container matColumnDef="macontainer">
+                        <ng-container matColumnDef="idContainer">
                         <th mat-header-cell *matHeaderCellDef> Số container </th>
                         <td mat-cell *matCellDef="let element"> {{element.idContainer}} </td>
                         </ng-container>
@@ -68,15 +68,15 @@
                         </ng-container>
                         
                         <!-- Position Column -->
-                        <ng-container matColumnDef="tenloai">
+                        <ng-container matColumnDef="typeContainerName">
                             <th mat-header-cell *matHeaderCellDef> Loại container </th>
                             <td mat-cell *matCellDef="let element"> {{element.typeContainerName}} </td>
                         </ng-container>
                         
                         <!-- Ngày nhập công Column -->
-                        <ng-container matColumnDef="typeContainerName">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by typeContainerName"> Ngày nhập cảng </th>
-                            <td mat-cell *matCellDef="let element">{{element.typeContainerName | date:'dd/MM/YYYY' }}</td>
+                        <ng-container matColumnDef="dateOfEntryContainer">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by dateOfEntryContainer"> Ngày nhập cảng </th>
+                            <td mat-cell *matCellDef="let element">{{element.dateOfEntryContainer | date:'dd/MM/YYYY' }}</td>
                         </ng-container>
             
                         <ng-container matColumnDef="choose">
@@ -110,7 +110,7 @@
           <div>
             <button mat-button matStepperPrevious>Back</button>
             <button mat-button (click)="stepper.reset()">Reset</button>
-            <button mat-button (click)="LAYSOLIEU(InputNgayXuat,InputThoiGianXuat,inputBienSo,inputPhuongTienVanChuyen)">Done</button>
+            <button mat-button (click)="FetchDataForApi(inputDateOfExit,inputTimeOfExit,inputTransportLiscence,inputTransportType)">Done</button>
           </div>
         </mat-step>
     </mat-stepper>

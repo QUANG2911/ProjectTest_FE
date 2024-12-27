@@ -5,12 +5,12 @@ export const NavBarData = [
         label: 'Quản lý container'
     },
     {
-        routeLink:'phieuNhapcontainer',
+        routeLink:'EntryContainerForm',
         icon: 'list_alt',
         label: 'Quản lý phiếu nhập'
     },
     {
-        routeLink:'phieuXuatContainer',
+        routeLink:'ExitContainerForm',
         icon: 'waves',
         label: 'Quản lý phiếu xuất'
     }

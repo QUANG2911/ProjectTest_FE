@@ -15,8 +15,8 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-detail-container',
   imports: [MatFormFieldModule,FormsModule,MatIconModule,FormsModule,CommonModule],
-  templateUrl: './DetailContainer.component.html',
-  styleUrl: './DetailContainer.component.css'
+  templateUrl: './ContainerDetail.component.html',
+  styleUrl: './ContainerDetail.component.css'
 })
 export class DetailContainerComponent implements OnInit {
 

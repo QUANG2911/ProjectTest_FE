@@ -72,7 +72,7 @@ export class SidenavComponent implements OnInit{
       this.navData = NavBarData
     }
     else{
-      this.navData = NavBarData.filter(item =>['phieuNhapcontainer', 'phieuXuatContainer'].includes(item.routeLink));
+      this.navData = NavBarData.filter(item =>['EntryContainerForm', 'ExitContainerForm'].includes(item.routeLink));
     }
   }
   //HostListener: là hàm tự động chạy

@@ -1,4 +1,4 @@
-export class DetailPhieuXuat {
+export class ExitContainerFormInformation {
     idExitForm!: string;
     idContainer!: string;
     // isoCode!: string;

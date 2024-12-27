@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../../Service/DataService';
 import { ApiService } from '../../Service/ApiService';
 
@@ -19,49 +19,56 @@ import {Router, RouterModule} from '@angular/router'; // dung routerLink
 // khai báo sort
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSort, Sort,MatSortModule } from '@angular/material/sort';
-
+import { EntryContainerFormList } from '../../Model/EntryContainerFormList.model';
 import { FormsModule } from '@angular/forms';
 
 
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input'; // Nếu cần nhập liệu
 import { MatButtonModule } from '@angular/material/button'; // Nếu có sử dụng button
 import { DropDownListComponent } from '../ThuVien/DropDownList/DropDownList.component';
-import { DsPhieuXuat } from '../../Model/DsPhieuXuat.model';
-
-
 
 @Component({
-  selector: 'app-phieu-xuat-container',
-  imports: [DropDownListComponent,MatFormFieldModule,MatSelectModule, MatOptionModule,MatInputModule,MatButtonModule,MatIconModule,MatPaginator,MatSortModule, MatTableModule,MatPaginatorModule,CommonModule,RouterModule,FormsModule],
-  templateUrl: './PhieuXuatContainer.component.html',
-  styleUrl: './PhieuXuatContainer.component.css'
+  selector: 'app-phieu-nhap-container',
+  imports: [DropDownListComponent,MatFormFieldModule, MatOptionModule,MatInputModule,MatButtonModule,MatIconModule,MatPaginator,MatSort,MatSortModule, MatTableModule,MatPaginatorModule,CommonModule,RouterModule,FormsModule],
+  templateUrl: './EntyContainerForm.component.html',
+  styleUrl: './EntyContainerForm.component.css',
 })
-export class PhieuXuatContainerComponent implements OnInit{
-  
-  idUser: string = '';  
+export class EntryContainerFormComponent implements OnInit{
+  // khai báo biến
+  //// biên idUser để lấy idUser từ local storage
+  idUser: string = "";  
 
-  item!: string; 
-
+  //// khai báo biến để lấy dữ liệu từ API và lưu dữ liệu chuyền qua các component khác
   constructor(private dataService :DataService,
               private api :ApiService,
               private router : Router
              ){}
   
-  ELEMENT_DATA: DsPhieuXuat[] = [];
+  //// biến để hứng dữ liệu từ API
+  ELEMENT_DATA: EntryContainerFormList[] = [];
   
-  // hàm sắp xếp
+  //// sắp xếp
   private _liveAnnouncer = inject(LiveAnnouncer);
   @ViewChild(MatSort) sort!: MatSort;
 
-  //hàm list page
+  //// list page
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
+  //// biến để lưu giá trị vòng tròn loading
   isLoading: boolean = false;
-         
+
+  //// biến để lưu giá trị trạng thái show button add khi user là tài khoản Customer
   itemsToShow: number[] = [];
+
+  //thêm số lượng cột ở đây
+  displayedColumns: string[] = ['idEntryForm','dateOfEntryContainer', 'customerName', 'phoneNumber','dateOfEntryRegistration','status','action'];
+  
+  dataSource: any;             
+
+  originalData: EntryContainerFormList[] = []; 
+  
 
   setItemsToShow() {
     if (this.idUser !== 'SNP') {
@@ -74,27 +81,24 @@ export class PhieuXuatContainerComponent implements OnInit{
   }
 
   //Lấy dữ liệu từ API
-  getListContainer(): void{
+  getListEntryForm(): void{
     this.isLoading = true;
-    this.api.GetDsPhieuXuat(this.idUser)
+    this.api.getDsPhieuNhap(this.idUser)
     .subscribe(
       (data) => {
         if(data.length > 0)
         {
-          this.ELEMENT_DATA = data as DsPhieuXuat[];
+          this.ELEMENT_DATA = data as EntryContainerFormList[];
 
           // nạp dữ liệu vào table
-          this.dataSource = new MatTableDataSource<DsPhieuXuat>(this.ELEMENT_DATA);
-          //
+          this.dataSource = new MatTableDataSource<EntryContainerFormList>(this.ELEMENT_DATA);
+          
           this.originalData = this.ELEMENT_DATA;
 
           console.log(this.originalData);
 
           //select trạng thái
-          this.getDulieuTrangThai()
-
-          // set page và sort của table
-          
+          this.getListWithStatus()
       
           this.isLoading = false;
         }           
@@ -103,7 +107,7 @@ export class PhieuXuatContainerComponent implements OnInit{
     ); 
   }
 
-  getDulieuTrangThai()
+  getListWithStatus()
   {
       this.dataService.getData();
 
@@ -111,43 +115,33 @@ export class PhieuXuatContainerComponent implements OnInit{
       {
         if(data.selectOption != null)
         {
-          this.DanhSachTrangThai(data.selectOption);
-        }        
+          this.ListStatus(data.selectOption);
+        }   
+        console.log(data.selectOption);  
       });
   }
 
   ngOnInit(): void {
     this.idUser = this.dataService.getUserId();
     console.log("Phieu Nhap:" + this.idUser);
-    this.getListContainer();
     this.setItemsToShow();
+    this.getListEntryForm();
   }
-
+  
   fetchData() {
     // Mô phỏng việc lấy dữ liệu từ API
     setTimeout(() => {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-    },300); // Giả lập thời gian tải dữ liệu
+    },500); // Giả lập thời gian tải dữ liệu
   }
-
-  ngAfterViewInit(): void {
-    this.fetchData();
-  }
-
-  //thêm số lượng cột ở đây
-  displayedColumns: string[] = ['maphieuxuat','dateOfExitRegistration', 'tenKh', 'sdt','dateOfExitContainer','trangthaiduyet','action'];
-  dataSource: any;             
-
-  originalData: DsPhieuXuat[] = []; 
   
-  // hàm sreach  
-  SearchMaContainer(maphieuxuat: any): void
+   // hàm sreach  
+  SearchIdEntryForm(inputIdEntryForm: any): void
   {
-    this.item = maphieuxuat.value;
-    if(this.item != null)
+    if(inputIdEntryForm.value != null)
     {
-      this.dataSource.data = this.originalData.filter(p=>p.idExitForm.toLowerCase().includes(this.item.toLowerCase()));
+      this.dataSource.data = this.originalData.filter(p=>p.idEntryForm.toLowerCase().includes(inputIdEntryForm.value.toLowerCase()));
     }
     else {
       this.dataSource.data = this.originalData;
@@ -155,7 +149,7 @@ export class PhieuXuatContainerComponent implements OnInit{
   }
 
   // select Trạng thái
-  DanhSachTrangThai(TrangThai: any):void
+  ListStatus(TrangThai: any):void
   {
     console.log(TrangThai);
     if(TrangThai == 1  || TrangThai == 0 || TrangThai == -1)
@@ -175,22 +169,22 @@ export class PhieuXuatContainerComponent implements OnInit{
       this._liveAnnouncer.announce('Sorting cleared');
     }
   }
-  tam :any;
+
   // ham chuyen page detail
-  TransformDetailPhieuXuatPage(maPhieuXuat: string, trangthaiduyet: number): void{  
-    if(maPhieuXuat != null) 
+  TransEntryContainerFormDetailPage(idEntryForm: string, status: number): void{  
+    if(idEntryForm != null) 
     {
-      this.dataService.setData({maNhap: maPhieuXuat, trangthaiduyet: trangthaiduyet,idUser :this.idUser});
-      this.router.navigate(['/mainApp/detailPhieuXuat']);
+      this.dataService.setData({idEntryForm: idEntryForm, status: status,idUser :this.idUser});
+      this.router.navigate(['/mainApp/EntryContainerFormDetail']);
     }      
     else 
-      console.log('maXuat is null');
+      console.log('maNhap is null');
   }
 
   //ham chuyen page add
-  ChuyenPageAdd(){
+  TransEntryContainerFormAddPage(){
     this.dataService.setData({idUser :this.idUser})
-    console.log(this.idUser);
-    this.router.navigate(['/mainApp/addPhieuXuat'])
+    this.router.navigate(['/mainApp/EntryContainerFormAdd'])
   }
+
 }

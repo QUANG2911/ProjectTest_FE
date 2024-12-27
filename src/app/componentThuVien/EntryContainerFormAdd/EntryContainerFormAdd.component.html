@@ -42,7 +42,7 @@
                     <mat-form-field>
                         <mat-label>Loại container</mat-label>
                         <mat-select #inputLoai >
-                          <mat-option *ngFor="let item of LOAI_DATA" [value]="item.maLoai" (click)="CheckThongTinIsoVoiLoai(inputLoai,inputMaISO)">
+                          <mat-option *ngFor="let item of TYPECONTAINER_DATA" [value]="item.maLoai" (click)="CheckContainerType(inputLoai,inputMaISO)">
                             {{ item.tenLoai }}
                           </mat-option>
                         </mat-select>
@@ -51,9 +51,9 @@
                     <mat-form-field>
                         <mat-label>Kích thước container</mat-label>
                         <mat-select  #inputKichThuoc >
-                            <mat-option value="20" (click)="CheckThongTinIsoVoiSize(inputKichThuoc,inputMaISO)">20 feet</mat-option>
-                            <mat-option value="40" (click)="CheckThongTinIsoVoiSize(inputKichThuoc,inputMaISO)">40 feet</mat-option>
-                            <mat-option value="45" (click)="CheckThongTinIsoVoiSize(inputKichThuoc,inputMaISO)">45 feet</mat-option>
+                            <mat-option value="20" (click)="CheckContainerSize(inputKichThuoc,inputMaISO)">20 feet</mat-option>
+                            <mat-option value="40" (click)="CheckContainerSize(inputKichThuoc,inputMaISO)">40 feet</mat-option>
+                            <mat-option value="45" (click)="CheckContainerSize(inputKichThuoc,inputMaISO)">45 feet</mat-option>
                         </mat-select>
                     </mat-form-field>
     
@@ -119,7 +119,7 @@
           <div>
             <button mat-button matStepperPrevious>Back</button>
             <button mat-button (click)="stepper.reset()">Reset</button>
-            <button mat-button (click)="LAYSOLIEU(inputMaContainer,inputMaISO,inputRongWeight,inputTongWeight,inputLoai,inputKichThuoc,inputDateSanXuat,InputNgayToiCang,InputThoiGianToi,inputBienSo,inputPhuongTienVanChuyen)">Done</button>
+            <button mat-button (click)="FetchDataForApi(inputMaContainer,inputMaISO,inputRongWeight,inputTongWeight,inputLoai,inputKichThuoc,inputDateSanXuat,InputNgayToiCang,InputThoiGianToi,inputBienSo,inputPhuongTienVanChuyen)">Done</button>
           </div>
         </mat-step>
     </mat-stepper>
