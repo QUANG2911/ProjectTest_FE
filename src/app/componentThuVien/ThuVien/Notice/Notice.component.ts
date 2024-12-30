@@ -35,7 +35,7 @@ export class ThongBaoComponent implements OnInit{
   {
     //this.serviceData.getData();
     this.serviceData.currentData.subscribe((data) =>{
-      if (data.maNhap === '')
+      if (data.maNhap === '' || data.maNhap === undefined)
         this.TilteThongBao = data.TilteThongBao;
       else
        this.TilteThongBao = data.TilteThongBao +" "+ data.maNhap;

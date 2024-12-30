@@ -124,8 +124,8 @@ export class ContainerComponent implements OnInit, AfterViewInit{
   }
 
   // ham chuyen page detail
-   TransformDetailPageContainer(id: number,maContainer: any, ngayditoivitri: any): void{   
-     this.dataService.setData({id: id, maContainer: maContainer, ngaytoi: ngayditoivitri})
+   TransformDetailPageContainer(id: number,idContainer: string, dateOfEntryContainer: Date): void{   
+     this.dataService.setData({id: id, idContainer: idContainer, dateOfEntryContainer: dateOfEntryContainer})
    }
 
    

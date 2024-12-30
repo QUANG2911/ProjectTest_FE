@@ -13,6 +13,7 @@ import { ThongBaoComponent } from '../ThuVien/Notice/Notice.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Console } from 'console';
+import { Notification, Title } from '../../Key/KeyThongBao';
 
 
 
@@ -31,7 +32,7 @@ export class EntryContainerFormDetailComponent implements OnInit{
   keyDetail = Detail;
   
   // lấy dữ liệu từ key container để show ra dạng table ngang
-  keyTrans = ContainerTransport.filter(p =>p.field === 'macontainer' || p.field === 'ngayditoivitri' || p.field === 'donViDuaToiCang' || p.field == 'bienSoDonViVanChuyen');
+  keyTrans = ContainerTransport.filter(p =>p.field === 'idContainer' || p.field === 'dateOfEntryContainer' || p.field === 'transportEntyType' || p.field == 'transportaLicense');
   
   // lấy dữ liệu của component Entry Form gửi
   idEntryForm : string ="";
@@ -49,6 +50,9 @@ export class EntryContainerFormDetailComponent implements OnInit{
               private router: Router
              ){}
   
+  dataNotice = Notification;
+  dataTilte = Title;
+
  setItemsToShow(status: number,idUser: string) {
     if (status == 0 && idUser === 'SNP') {
       this.itemsToShow = [1]; // Hiển thị Button 
@@ -87,15 +91,15 @@ export class EntryContainerFormDetailComponent implements OnInit{
         (data) =>{  
             console.log(data);        
             this.ELEMENT_DATA = data as EntryContainerFormInformation;
-            this.dataDetail["donViDuaToiCang"] = this.ELEMENT_DATA.transportEntryType;
-            this.dataDetail["loaiContainer"] = this.ELEMENT_DATA.typeContainer;
-            this.dataDetail["maIso"] = this.ELEMENT_DATA.isoCode;
-            this.dataDetail["ngayditoivitri"] = formatDate(this.ELEMENT_DATA.dateOfContainerEntry,'dd-MM-YYYY, giờ: HH:mm:ss','en-US');
-            this.dataDetail["macontainer"] = this.ELEMENT_DATA.idContainer;
+            this.dataDetail["transportEntyType"] = this.ELEMENT_DATA.transportEntryType;
+            this.dataDetail["containerType"] = this.ELEMENT_DATA.typeContainer;
+            this.dataDetail["isoCode"] = this.ELEMENT_DATA.isoCode;
+            this.dataDetail["dateOfEntryContainer"] = formatDate(this.ELEMENT_DATA.dateOfContainerEntry,'dd-MM-YYYY, giờ: HH:mm:ss','en-US');
+            this.dataDetail["idContainer"] = this.ELEMENT_DATA.idContainer;
             this.dataDetail["size"] = this.ELEMENT_DATA.size;
-            this.dataDetail["trongLuongRong"] = this.ELEMENT_DATA.tareWeight;
-            this.dataDetail["trongLuongTong"] = this.ELEMENT_DATA.maxWeight;
-            this.dataDetail["bienSoDonViVanChuyen"] = this.ELEMENT_DATA.transportEntryLicensePlate;
+            this.dataDetail["tareWeight"] = this.ELEMENT_DATA.tareWeight;
+            this.dataDetail["maxWeight"] = this.ELEMENT_DATA.maxWeight;
+            this.dataDetail["transportaLicense"] = this.ELEMENT_DATA.transportEntryLicensePlate;
         }
       );
     }
@@ -109,28 +113,28 @@ export class EntryContainerFormDetailComponent implements OnInit{
     this.status = status;
     let width: string = '300px';
     let susscess: boolean = true;
-    let title: string = '';
-    let content: string = '';
+    let title: any = '';
+    let content: any = '';
     let typeNotification: number = 1;
     if(status == 1)
     {
       width = '400px';
-      title = "Duyệt đơn";
-      content = "Bạn có muốn duyệt đơn này";
+      title = this.dataTilte.find(n => n.field === 'Notice')?.label.toString();
+      content = this.dataNotice.find(n => n.field === 'ConfirmApproval')?.label.toString(); 
     }
     else if (status == -1)
     {
       
       width = '400px';
-      title = "Từ chối đơn";
-      content = "Bạn có chắc từ chối đơn này";
+      title = this.dataTilte.find(n => n.field === 'Notice')?.label.toString();
+      content = this.dataNotice.find(n => n.field === 'ConfirmRejection')?.label.toString(); 
     }
     console.log("idEntryForm" + this.idEntryForm);
     
     this.GetNotification(title,content,typeNotification,width,susscess);
   }
 
-  GetNotification(title: string, content: string, typeNotification : number, width: string, susscess: boolean)
+  GetNotification(title: any, content: any, typeNotification : number, width: string, susscess: boolean)
   {
     this.dataService.setData({TilteThongBao: title, idEntryForm: this.idEntryForm, NoiDungThongBao : content, LoaiThongBao: typeNotification,status: this.status, idUser : this.idUser});
     this.openDialog('0ms', '0ms',width,susscess);
@@ -153,13 +157,16 @@ export class EntryContainerFormDetailComponent implements OnInit{
         {
             this.api.putDetailsPhieuNhap(this.idEntryForm,this.status).subscribe({
               next: (response) => {
-                console.log('Cập nhật thành công:', response);    
-                this.GetNotification("Thông báo","Bạn đã cập nhật trạng thái thành công",2,'400px',false);       
+                console.log('Cập nhật thành công:', response);   
+                let title = this.dataTilte.find(n => n.field === 'Notice')?.label.toString();
+                let content = this.dataNotice.find(n => n.field === 'UpdateStatusSuccess')?.label.toString(); 
+                this.GetNotification(title,content,2,'400px',false);       
                 this.ReturnEntryPage();
               },
               error: (error) => {
-                window.alert('Đã xảy ra lỗi duyệt phiếu! Vui lòng thử lại.');
-                console.error('Lỗi khi cập nhật:', error);
+                let title = this.dataTilte.find(n => n.field === 'Warning')?.label.toString();
+                let content = this.dataNotice.find(n => n.field === 'ApprovalError')?.label.toString(); 
+                this.GetNotification(title,content,2,'400px',false);
               }
             });
           console.log(result.idEntryForm);

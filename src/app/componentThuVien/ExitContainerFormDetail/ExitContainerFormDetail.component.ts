@@ -16,6 +16,7 @@ import { ExitContainerFormInformation } from '../../Model/ExitContainerFormInfor
 import { MatSort, Sort, MatSortModule} from '@angular/material/sort';
 import { LiveAnnouncer} from '@angular/cdk/a11y';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { Notification, Title } from '../../Key/KeyThongBao';
 
 @Component({
   selector: 'app-detail-phieu-xuat',
@@ -36,7 +37,7 @@ export class ExitContainerFormDetailComponent implements OnInit{
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   // keyDetail = Detail;
   
-  keyTrans = ContainerTransport.filter(p =>p.field === 'ngayxuatcang' || p.field === 'donViXuatCang' || p.field === 'sdt' || p.field == 'bienSoDonViVanChuyen');
+  keyTrans = ContainerTransport.filter(p =>p.field === 'dateOfExitContainer' || p.field === 'transportExistType' || p.field === 'phoneNumber' || p.field == 'transportaLicense');
   // lấy dữ liệu của API gửi lên
   idExitForm : string ="";
   status: number = 0;
@@ -45,6 +46,9 @@ export class ExitContainerFormDetailComponent implements OnInit{
   itemsToShow: number[] = [];
 
   ELEMENT_DATA: ExitContainerFormInformation[] = [];
+
+  dataNotice = Notification;
+  dataTilte = Title;
 
   displayedColumns: string[] = ['idContainer','size','typeContainerName','dateOfEntryContainer'];
   dataSource: any;             
@@ -120,10 +124,10 @@ export class ExitContainerFormDetailComponent implements OnInit{
           // nạp dữ liệu vào table
           this.dataSource = new MatTableDataSource<ExitContainerFormInformation>(this.ELEMENT_DATA);
 
-          this.dataDetail['ngayxuatcang'] = formatDate(this.ELEMENT_DATA[0].dateOfExitContainer,'dd-MM-YYYY, giờ: HH:mm:ss','en-US');
-          this.dataDetail['donViXuatCang'] = this.ELEMENT_DATA[0].tranportExitType;
-          this.dataDetail['sdt'] = this.ELEMENT_DATA[0].phoneNumber;
-          this.dataDetail['bienSoDonViVanChuyen'] = this.ELEMENT_DATA[0].tranportExitType;
+          this.dataDetail['dateOfExitContainer'] = formatDate(this.ELEMENT_DATA[0].dateOfExitContainer,'dd-MM-YYYY, giờ: HH:mm:ss','en-US');
+          this.dataDetail['transportExistType'] = this.ELEMENT_DATA[0].tranportExitType;
+          this.dataDetail['phoneNumber'] = this.ELEMENT_DATA[0].phoneNumber;
+          this.dataDetail['transportaLicense'] = this.ELEMENT_DATA[0].tranportExitType;
           //
           this.originalData = this.ELEMENT_DATA;
 
@@ -139,28 +143,27 @@ export class ExitContainerFormDetailComponent implements OnInit{
     this.status = status;
     let width: string = '300px';
     let susscess: boolean = true;
-    let title: string = '';
-    let content: string = '';
+    let title: any = '';
+    let content: any = '';
     let typeNotification: number = 1;
     if(status == 1)
     {
       width = '400px';
-      title = "Duyệt đơn";
-      content = "Bạn có muốn duyệt đơn này";
+      title = this.dataTilte.find(n => n.field === 'Notice')?.label.toString();
+      content = this.dataNotice.find(n => n.field === 'ConfirmApproval')?.label.toString(); 
     }
     else if (status == -1)
     {
-      
       width = '400px';
-      title = "Từ chối đơn";
-      content = "Bạn có chắc từ chối đơn này";
+      title = this.dataTilte.find(n => n.field === 'Notice')?.label.toString();
+      content = this.dataNotice.find(n => n.field === 'ConfirmRejection')?.label.toString(); 
     }
     console.log("idExitForm" + this.idExitForm);
     
     this.GetNotification(title,content,typeNotification,width,susscess);
   }
 
-  GetNotification(title: string, content: string, typeNotification : number, width: string, susscess: boolean)
+  GetNotification(title: any, content: any, typeNotification : number, width: string, susscess: boolean)
   {
     this.dataService.setData({TilteThongBao: title, idExitForm: this.idExitForm, NoiDungThongBao : content, LoaiThongBao: typeNotification,status: this.status, idUser : this.idUser});
     this.openDialog('0ms', '0ms',width,susscess);
@@ -183,13 +186,16 @@ export class ExitContainerFormDetailComponent implements OnInit{
         {
             this.api.putDetailsPhieuXuat(this.idExitForm,this.status).subscribe({
               next: (response) => {
-                console.log('Cập nhật thành công:', response);    
-                this.GetNotification("Thông báo","Bạn đã cập nhật trạng thái thành công",2,'400px',false);       
+                console.log('Cập nhật thành công:', response);   
+                let title = this.dataTilte.find(n => n.field === 'Notice')?.label.toString();
+                let content = this.dataNotice.find(n => n.field === 'UpdateStatusSuccess')?.label.toString(); 
+                this.GetNotification(title,content,2,'400px',false);       
                 this.ReturnExitPage();
               },
               error: (error) => {
-                window.alert('Đã xảy ra lỗi duyệt phiếu! Vui lòng thử lại.');
-                console.error('Lỗi khi cập nhật:', error);
+                let title = this.dataTilte.find(n => n.field === 'Warning')?.label.toString();
+                let content = this.dataNotice.find(n => n.field === 'ApprovalError')?.label.toString(); 
+                this.GetNotification(title,content,2,'400px',false);
               }
             });
           console.log(result.idExitForm);

@@ -21,6 +21,7 @@ import { ThongBaoComponent } from '../ThuVien/Notice/Notice.component';
 import { EntryContainerFormInformation } from '../../Model/EntryContainerFormInformation.model';
 import { FormatDateService } from '../../Service/FormatDateSevice';
 import { ContainerType } from '../../Model/ContainerType.model';
+import { Notification, Title } from '../../Key/KeyThongBao';
 
 
 
@@ -66,6 +67,9 @@ export class EntryContainerFormAddComponent implements OnInit{
   });
 
   readonly dialog = inject(MatDialog);
+
+  dataNotice = Notification;
+  dataTilte = Title;
 
   getDataFromEntryContainerPage()
   {
@@ -114,8 +118,8 @@ export class EntryContainerFormAddComponent implements OnInit{
     {
       let width: string = '400px';
       let susscess: boolean = false;
-      let title: string = "Cảnh báo";
-      let content: string = "Thông tin kích thước và loại mã Iso chọn không hợp lệ";
+      let title: any = this.dataTilte.find(n => n.field === 'Notice')?.label.toString();
+      let content: any = this.dataNotice.find(n => n.field === 'IsoErrorSizeContainer')?.label.toString();
       let typeNotification: number = 2;
       this.GetNotification(title,content,typeNotification,width,susscess);
     }
@@ -128,8 +132,8 @@ export class EntryContainerFormAddComponent implements OnInit{
     if(kiTuBaIso != inputTypeContainer.value){
       let width: string = '400px';
       let susscess: boolean = false;
-      let title: string = "Cảnh báo";
-      let content: string = "Thông tin loại và loại mã Iso chọn không hợp lệ";
+      let title: any = this.dataTilte.find(n => n.field === 'Notice')?.label.toString();
+      let content: any = this.dataNotice.find(n => n.field === 'IsoErrorTypeContainer')?.label.toString();
       let typeNotification: number = 2;
       this.GetNotification(title,content,typeNotification,width,susscess);
     }
@@ -143,26 +147,26 @@ export class EntryContainerFormAddComponent implements OnInit{
 
     let width: string = '300px';
     let susscess: boolean = false;
-    let title: string = '';
-    let content: string = '';
+    let title: any = '';
+    let content: any = '';
     let typeNotification: number = 2;
     
     if (inputNumContainer.value=== "" ||inputIsoCode.value=== "" ||inputTareWeight.value=== "" ||inputMaxWeight.value=== "" || inputTypeContainer.value=== ""||inputSize.value=== "" ||inputDateOfManufacture.value=== "" ||inputDateOfEntryContainer.value=== "" || inputTimeOfEntryContainer.value=== "" ||inputTransportEntryLicensePlate.value === "" || inputTransportType.value === "")
     { 
-      title = "Cảnh báo";
-      content = "Bạn vui lòng điền đầy đủ thông tin";
+      title = this.dataTilte.find(n => n.field === 'Warning')?.label.toString();
+      content = this.dataNotice.find(n => n.field === 'MissingInfo')?.label.toString();
     }
     else if (thoiGianSx.getTime() >= currentData.getTime())
     {
-      title = "Cảnh báo";
       width = '500px';
-      content = "Bạn vui lòng điền lại ngày sản xuất không thể lớn hơn ngày hiện tại";  
+      title = this.dataTilte.find(n => n.field === 'Warning')?.label.toString();
+      content = this.dataNotice.find(n => n.field === 'InvalidProductionDate')?.label.toString(); 
     }
     else if(thoiGianToi.getTime() <= currentData.getTime())
     {
-      title = "Cảnh báo";
       width = '600px';
-      content = "Bạn vui lòng điền lại ngày giao container không thể nhỏ hơn hay bằng ngày hiện tại";   
+      title = this.dataTilte.find(n => n.field === 'Warning')?.label.toString();
+      content = this.dataNotice.find(n => n.field === 'InvalidDeliveryDate')?.label.toString(); 
     }
     else{
       this.inputEntryInformation = new EntryContainerFormInformation(
@@ -180,9 +184,9 @@ export class EntryContainerFormAddComponent implements OnInit{
                                                   '',
                                                   thoiGianSx);
         console.log(this.inputEntryInformation);
-        title = "Tạo phiếu";
         width = '300px';
-        content = "Bạn có chắc muốn tạo đơn này";
+        title = this.dataTilte.find(n => n.field === 'Create')?.label.toString();
+        content = this.dataNotice.find(n => n.field === 'ConfirmCreateOrder')?.label.toString(); 
         typeNotification = 1;      
         susscess = true;
       }
@@ -208,15 +212,18 @@ export class EntryContainerFormAddComponent implements OnInit{
         console.log('The dialog was closed');
         if (result !== undefined) // nếu chọn No là undefined
         {
-          console.log("tạo thành công");
           this.api.postNewPhieuNhap(this.idUser,this.inputEntryInformation).subscribe(
             (reponse) => {
               console.log("Api thành công: "+reponse);
-              this.GetNotification("Thông báo","Tạo phiếu nhập thành công",2,'400px',false);
+              let title: any = this.dataTilte.find(n => n.field === 'Notice')?.label.toString();
+              let content: any = this.dataNotice.find(n => n.field === 'CreateSuccess')?.label.toString();
+              this.GetNotification(title,content,2,'400px',false);
               this.router.navigate(['/mainApp/EntryContainerForm']);
             },
             (error) =>{
-                console.log("Lỗi api post: " +error);
+              let title: any = this.dataTilte.find(n => n.field === 'Notice')?.label.toString();
+              let content: any = this.dataNotice.find(n => n.field === 'CreateFail')?.label.toString();
+              this.GetNotification(title,content,2,'400px',false);
             }
           );
         }

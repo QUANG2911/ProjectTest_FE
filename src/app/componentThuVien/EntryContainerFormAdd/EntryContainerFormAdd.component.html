@@ -42,8 +42,8 @@
                     <mat-form-field>
                         <mat-label>Loại container</mat-label>
                         <mat-select #inputLoai >
-                          <mat-option *ngFor="let item of TYPECONTAINER_DATA" [value]="item.maLoai" (click)="CheckContainerType(inputLoai,inputMaISO)">
-                            {{ item.tenLoai }}
+                          <mat-option *ngFor="let item of TYPECONTAINER_DATA" [value]="item.idTypeContainer" (click)="CheckContainerType(inputLoai,inputMaISO)">
+                            {{ item.nameTypeContainer }}
                           </mat-option>
                         </mat-select>
                       </mat-form-field>

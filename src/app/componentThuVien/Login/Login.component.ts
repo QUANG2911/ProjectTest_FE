@@ -11,6 +11,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import { Login } from '../../Model/login.model';
+import { Notification, Title } from '../../Key/KeyThongBao';
 @Component({
   selector: 'app-login-in',
   imports: [MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule,MatSelectModule],
@@ -29,6 +30,9 @@ export class LoginInComponent{
     private router: Router
    ){}
   
+  dataNotice = Notification;
+  dataTilte = Title;
+
   ///// khai báo nút ẩn hiện password
   hide = signal(true);
 
@@ -45,11 +49,12 @@ export class LoginInComponent{
     console.log(inputLoaiTk.value);
     if(inputUser.value.trim() === '' || inputPass.value.trim() === '')
     {
-      this.GetNotification("Vui lòng điền đầy đủ Username và Password");
+      
+      this.GetNotification(this.dataNotice.find(n => n.field === 'MissingLoginInfo')?.label.toString());
     }      
     else if(inputLoaiTk.value === undefined)
     {
-      this.GetNotification("Vui lòng chọn loại tài khoản đăng nhập");
+      this.GetNotification(this.dataNotice.find(n => n.field === 'SelectAccountType')?.label.toString());
     }
     else{
       this.CheckUserLogin(inputUser.value,inputPass.value,inputLoaiTk.value)
@@ -66,45 +71,45 @@ export class LoginInComponent{
 
         if(typeAccount === 'customer')
         {
-          if(this.userLogin.maKH === null)
+          if(this.userLogin.idCustomer === null)
           {            
-            this.GetNotification("Không tồn tại tài khoản khách hàng này");
+            this.GetNotification(this.dataNotice.find(n => n.field === 'CustomerNotFound')?.label.toString());
           }
           else
           {
-            this.dataService.setUserId(this.userLogin.maKH);
-            console.log("login makh: " + this.userLogin.maKH);
+            this.dataService.setUserId(this.userLogin.idCustomer);
+            console.log("login idCustomer: " + this.userLogin.idCustomer);
             this.router.navigate(['/mainApp']);
           }         
         }
         else
         {
-          if(this.userLogin.maNv === null)
+          if(this.userLogin.idStaff === null)
             {
-              this.GetNotification("Không tồn tại tài khoản nhân viên này");
+              this.GetNotification(this.dataNotice.find(n => n.field === 'EmployeeNotFound')?.label.toString());
             }
             else
             {
-              this.dataService.setUserId(this.userLogin.maNv);
-              console.log("login manv: " + this.userLogin.maNv);
+              this.dataService.setUserId(this.userLogin.idStaff);
+              console.log("login manv: " + this.userLogin.idStaff);
               this.router.navigate(['/mainApp']);
             }
         }  
       },(error) =>{
-        this.GetNotification("Không tồn tại tài khoản này");
+        this.GetNotification(this.dataNotice.find(n => n.field === 'LoginNotFound')?.label.toString());
       }
    )
   }
 
   //Hàm thông báo
-  GetNotification(noiDungThongBao: string){
+  GetNotification(noiDungThongBao: any){
     this.dataService.setData({TilteThongBao: "Thông báo", NoiDungThongBao : noiDungThongBao, LoaiThongBao: 2});
     this.openDialog('0ms', '0ms');
   }
   
   openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
     const dialogRef =this.dialog.open(ThongBaoComponent, {
-      width: '300px'
+      width: '400px'
     });
   }
 }

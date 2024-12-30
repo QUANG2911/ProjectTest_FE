@@ -1,11 +1,11 @@
 export class ContainerType {
-    maLoai!: string;
-    tenLoai!: string;
+    idTypeContainer!: string;
+    nameTypeContainer!: string;
 
-    constructor (maLoai:string,tenLoai:string)
+    constructor (idTypeContainer:string,nameTypeContainer:string)
     {
-        this.maLoai = maLoai,
-        this.tenLoai = tenLoai
+        this.idTypeContainer = idTypeContainer,
+        this.nameTypeContainer = nameTypeContainer
     }
 }
 

@@ -28,6 +28,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input'; // Nếu cần nhập liệu
 import { MatButtonModule } from '@angular/material/button'; // Nếu có sử dụng button
 import { DropDownListComponent } from '../ThuVien/DropDownList/DropDownList.component';
+import { Console } from 'node:console';
 
 @Component({
   selector: 'app-phieu-nhap-container',
@@ -90,6 +91,7 @@ export class EntryContainerFormComponent implements OnInit{
         {
           this.ELEMENT_DATA = data as EntryContainerFormList[];
 
+          console.log(this.ELEMENT_DATA);
           // nạp dữ liệu vào table
           this.dataSource = new MatTableDataSource<EntryContainerFormList>(this.ELEMENT_DATA);
           
@@ -126,6 +128,7 @@ export class EntryContainerFormComponent implements OnInit{
     console.log("Phieu Nhap:" + this.idUser);
     this.setItemsToShow();
     this.getListEntryForm();
+    this.fetchData();
   }
   
   fetchData() {

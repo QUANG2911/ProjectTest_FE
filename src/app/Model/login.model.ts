@@ -1,17 +1,17 @@
 export class Login{
     stt!: number;
-    maKH!: string;
-    maNv!: string;
-    loaiAccount!: string;
+    idCustomer!: string;
+    idStaff!: string;
+    accountType!: string;
     pass!: string;
     username!: string;
 
-    constructor(stt: number, maKH: string, maNv: string,loaiAccount: string,pass:string,username:string)
+    constructor(stt: number, idCustomer: string, idStaff: string,accountType: string,pass:string,username:string)
     {
         this.stt = stt;
-        this.maKH = maKH;
-        this.maNv = maNv;
-        this.loaiAccount = loaiAccount;
+        this.idCustomer = idCustomer;
+        this.idStaff = idStaff;
+        this.accountType = accountType;
         this.pass = pass;
         this.username = username;
     }

@@ -37,6 +37,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {selectList } from '../../Model/SelectList.model';
 import {ExitContainerFormToCreateNew } from '../../Model/ExitContainerFormToCreateNew.model';
+import { Notification, Title } from '../../Key/KeyThongBao';
 
 @Component({
   selector: 'app-add-phieu-xuat',
@@ -93,6 +94,20 @@ export class ExitContainerFormAddComponent implements OnInit{
    @ViewChild(MatPaginator) paginator!: MatPaginator;
    // keyDetail = Detail;
    
+  dataNotice = Notification;
+  dataTilte = Title;
+
+  ////////////check box////////////
+  dsSelectContainer : selectList[] =[];
+  selectALL = false;
+  itemsToShow: number[] = [];
+
+  
+   private _formBuilder = inject(FormBuilder);
+
+   private transportType: string = "";
+
+   readonly dialog = inject(MatDialog);
     // mũi tên hiện sắp xếp
     announceSortChange(sortState: Sort) {
      if (sortState.direction) {
@@ -114,11 +129,7 @@ export class ExitContainerFormAddComponent implements OnInit{
         console.log("Không có idUser truyền qua");
     })
   }
-  private _formBuilder = inject(FormBuilder);
-  private transportType: string = "";
 
-  
-  readonly dialog = inject(MatDialog);
   ngOnInit(): void {
     this.getDataFormExitForm();
     this.getContainerInSnp(this.idUser);
@@ -160,11 +171,6 @@ export class ExitContainerFormAddComponent implements OnInit{
     secondCtrl: ['', Validators.required],
     checkBox: new FormControl(false)
   });
-
-  ////////////check box////////////
-  dsSelectContainer : selectList[] =[];
-  selectALL = false;
-  itemsToShow: number[] = [];
 
   GetTransportType(inputTransportType: any)
   {
@@ -233,12 +239,11 @@ export class ExitContainerFormAddComponent implements OnInit{
   
     if(this.transportType == 'Xe' && total > 40)
     {
-      this.GetNotification("Cảnh báo","Với loại hình phương tiện xe chỉ được xuất container dưới 40 feet trên 1 truyến",2,'500px',false);  
+      let title = this.dataTilte.find(n => n.field === 'Warning')?.label.toString();
+      let content = this.dataNotice.find(n => n.field === 'TransportTypeErrorSize')?.label.toString(); 
+      this.GetNotification(title,content,2,'500px',false);  
     }
   }
-
-  //////////////////////////
-
 
   FetchDataForApi(inputDateOfExit: any, inputTimeOfExit: any,inputTransportLiscence: any, inputTransportType: any)
   {
@@ -252,29 +257,28 @@ export class ExitContainerFormAddComponent implements OnInit{
       this.idContainer = this.dsSelectContainer[i].id + "," +this.idContainer;
     }
 
-    
     let width: string = '300px';
     let susscess: boolean = false;
-    let title: string = '';
-    let content: string = '';
+    let title: any = '';
+    let content: any = '';
     let typeNotification: number = 2;
 
     if (inputDateOfExit.value === '' || inputTimeOfExit.value === '' ||inputTransportLiscence.value === '' || inputTransportType.value === '')
     {
-      title = "Cảnh báo";
-      content = "Bạn vui lòng điền đầy đủ thông tin";
+      title = this.dataTilte.find(n => n.field === 'Warning')?.label.toString();
+      content = this.dataNotice.find(n => n.field === 'MissingInfo')?.label.toString();
     }
     else if(thoiGianXuat.getTime() <= currentData.getTime())
     {
-      title = "Cảnh báo";
       width = '500px';
-      content = "Bạn vui lòng điền lại ngày xuất container không thể nhỏ hơn hay bằng ngày hiện tại";   
+      title = this.dataTilte.find(n => n.field === 'Warning')?.label.toString();
+      content = this.dataNotice.find(n => n.field === 'ExitErrorDate')?.label.toString(); 
     }
     else if(this.dsSelectContainer.length == 0)
     {
-      title = "Cảnh báo";
-      width = '400px';
-      content = "Bạn vui lòng chọn số lượng container muốn xuất";   
+      width = '500px';
+      title = this.dataTilte.find(n => n.field === 'Warning')?.label.toString();
+      content = this.dataNotice.find(n => n.field === 'AmountContainerExitError')?.label.toString(); 
     }
     else{
       this.exitContainerFormToCreateNew = new ExitContainerFormToCreateNew(
@@ -282,52 +286,16 @@ export class ExitContainerFormAddComponent implements OnInit{
                                             inputTransportLiscence.value,
                                             inputTransportType.value,);
       console.log(this.exitContainerFormToCreateNew);
-      title = "Tạo phiếu";
+      title = this.dataTilte.find(n => n.field === 'Create')?.label.toString();
+      content = this.dataNotice.find(n => n.field === 'ConfirmCreateOrder')?.label.toString(); 
       width = '300px';
-      content = "Bạn có chắc muốn tạo đơn này";
       typeNotification = 1;      
       susscess = true;
     }
     this.GetNotification(title,content,typeNotification,width,susscess);
   }
 
-
-
-  // openDialogApi(enterAnimationDuration: string, exitAnimationDuration: string): void {
-  //   const dialogRef =this.dialog.open(ThongBaoComponent, {
-  //     width: '300px',
-  //     enterAnimationDuration,
-  //     exitAnimationDuration,
-  //   });
-
-
-  //   dialogRef.afterClosed().subscribe((result) => {
-  //     console.log('The dialog was closed');
-  //     if (result !== undefined) // nếu chọn No là undefined
-  //     {
-  //       console.log("tạo thành công");
-       
-  //       console.log(this.idContainer);
-  //       this.api.postNewPhieuXuat(this.idUser,this.idContainer,this.exitContainerFormToCreateNew).subscribe(
-  //         (reponse) => {
-  //           console.log("Api thành công: "+reponse);
-  //           this.dataService.setData({TilteThongBao: "Thông báo", maNhap: "", NoiDungThongBao : "Tạo đơn phiếu mới thành công", LoaiThongBao: 2,idUser: this.idUser});
-  //           this.openDialogOut('0ms', '0ms');
-  //           this.router.navigate(['/mainApp/ExitContainerForm']);
-  //         },
-  //         (error) =>{
-  //           console.log("Lỗi api post: " +error);
-  //         }
-  //       );
-  //     }
-  //     else
-  //     {
-  //       console.log("xem xét tiếp")
-  //     }
-  //   });
-  // } 
-
-  GetNotification(title: string, content: string, typeNotification : number, width: string, susscess: boolean)
+  GetNotification(title: any, content: any, typeNotification : number, width: string, susscess: boolean)
   {
     this.dataService.setData({TilteThongBao: title, maNhap: "", NoiDungThongBao : content, LoaiThongBao: typeNotification,idUser: this.idUser,idContainer:this.idContainer });
     this.openDialogApi('0ms', '0ms',width,susscess);
@@ -350,11 +318,15 @@ export class ExitContainerFormAddComponent implements OnInit{
           this.api.postNewPhieuXuat(this.idUser,this.idContainer,this.exitContainerFormToCreateNew).subscribe(
             (reponse) => {
               console.log("Api thành công: "+reponse);
-              this.GetNotification("Thông báo","Tạo phiếu xuất thành công",2,'400px',false);
+              let title: any = this.dataTilte.find(n => n.field === 'Notice')?.label.toString();
+              let content: any = this.dataNotice.find(n => n.field === 'CreateSuccess')?.label.toString();
+              this.GetNotification(title,content,2,'400px',false);
               this.router.navigate(['/mainApp/ExitContainerForm']);
             },
             (error) =>{
-                console.log("Lỗi api post: " +error);
+              let title: any = this.dataTilte.find(n => n.field === 'Notice')?.label.toString();
+              let content: any = this.dataNotice.find(n => n.field === 'CreateFail')?.label.toString();
+              this.GetNotification(title,content,2,'400px',false);
             }
           );
         }
